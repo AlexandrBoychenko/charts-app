@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import dc from 'dc';
-import d3 from 'd3';
+import * as d3 from 'd3';
 import crossfilter from 'crossfilter';
 
 class Charts extends Component {
     componentDidMount() {
         let chart = dc.pieChart('#pie-chart');
-        d3.csv("data.csv").then(function(csvItems) {
+        d3.csv("http://127.0.0.1:3000/data.csv").then(function(csvItems) {
             let ndx = crossfilter(csvItems),
                 runDimension  = ndx.dimension(function(d) {return "run-"+d.markdown;}),
                 markdownSumGroup = runDimension.group().reduceSum(function(d) {return d.markdown;});
