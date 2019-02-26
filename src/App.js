@@ -1,49 +1,39 @@
 import React, { Component } from 'react';
-import dc from 'dc';
+import ChartPie from './components/ChartPie';
+import ChartLine from './components/ChartLine';
 import * as d3 from 'd3';
-import crossfilter from 'crossfilter';
-import './App.css';
-import './index.css';
+
+import './style/style.css';
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            csvData: []
+        }
+    }
+
     componentDidMount() {
-        let chart = dc.pieChart('#pie-chart');
-        d3.csv("data.csv").then(function(csvItems) {
-            let ndx = crossfilter(csvItems),
-                runDimension  = ndx.dimension(function(d) {return d.item_category;}),
-                markdownSumGroup = runDimension.group().reduceSum(function(d) {return d.markdown;});
-            chart
-                .width(768)
-                .height(480)
-                .innerRadius(100)
-                .dimension(runDimension)
-                .group(markdownSumGroup)
-                .minAngleForLabel(15)
-                .drawPaths(true)
-                .legend(dc.legend())
-                // workaround for #703: not enough data is accessible through .label() to display percentages
-                .on('pretransition', function(chart) {
-                    chart.selectAll('text.pie-slice').text(function(d) {
-                        let resultAngle = (d.endAngle - d.startAngle) / (2*Math.PI) * 100;
-                        if (resultAngle <= 3 ) {return}
-                        return dc.utils.printSingleValue(resultAngle) + '%';
-                    })
-                });
-            chart.render();
+            d3.csv("data.csv").then((csvData) => {
+                this.setState({csvData: csvData})
         });
     }
     render() {
-        return (
-            <div className="Charts">
-              <header className="Charts-header">
-                <h1>
-                  Charts for retail
-                </h1>
-                <div id="pie-chart"></div>
-                <div id="move-chart"></div>
-              </header>
-            </div>
-        );
+            return (
+                <div className="Charts">
+                    <header className="charts-header">
+                        <h1 className="main-title">
+                            Charts for retail
+                        </h1>
+                    </header>
+                    <div className="main-content">
+                        {/*<ChartPie csvData={this.state.csvData}/>*/}
+                        <ChartLine csvData={this.state.csvData}/>
+                    </div>
+                </div>
+            );
+
+
     }
 }
 

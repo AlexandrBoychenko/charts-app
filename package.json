@@ -8,15 +8,15 @@
     "react-scripts": "2.1.5",
     "dc": "latest",
     "d3": "latest",
-    "crossfilter": "latest"
+    "crossfilter": "latest",
+    "sass": "^1.17.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-server": "http://127.0.0.1:8080",
-    "postinstall": "npm install -g http-server"
+    "scss": "sass ./src/scss/main.scss ./src/style/style.css"
   },
   "eslintConfig": {
     "extends": "react-app"
