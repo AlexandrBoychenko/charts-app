@@ -10,11 +10,12 @@ class ChartLine extends Component {
 
         let ndx                 = crossfilter(this.props.csvData),
             runDimension        = ndx.dimension(function(d) {return +d.week_ref;}),
-            speedSumGroup       = runDimension.group().reduceSum(function(d) {return +d.markdown;});
+            speedSumGroup       = runDimension.group().reduceSum(function(d) {return d.markdown / 4000;});
         chart
             .width(768)
             .height(480)
             .x(d3.scaleLinear().domain([0,52]))
+            .margins({top: 30, right: 60, bottom: 30, left: 70})
             .renderArea(true)
             .brushOn(false)
             .renderDataPoints(true)
