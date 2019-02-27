@@ -14,14 +14,18 @@ class ChartLine extends Component {
 
         let xAxisRange = this.setAxisRange(runDimension, 'week_ref');
 
+        chart.width(function (element) {
+            let width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
+            return (width && width > chart.minWidth()) ? width : chart.minWidth();
+        });
+
         chart
-            .width(768)
             .height(480)
             .x(d3.scalePow().domain([xAxisRange.runMin, xAxisRange.runMax]))
-            .margins({top: 10, right: 70, bottom: 50, left: 60})
+            .margins({top: 10, right: 70, bottom: 50, left: 70})
             .brushOn(false)
             .xAxisLabel('Time')
-            .yAxisLabel('Markdown')
+            .yAxisLabel('Markdown Sum')
             .renderArea(true)
             .renderDataPoints(true)
             .clipPadding(10)
@@ -37,7 +41,11 @@ class ChartLine extends Component {
     }
 
     render() {
-        return (<div id="line-chart">Line chart</div>);
+        return (
+            <div id="line-chart">
+                <p className="chart-name">Line Chart</p>
+            </div>
+        );
     }
 }
 

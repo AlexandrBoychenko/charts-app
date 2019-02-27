@@ -59,8 +59,16 @@ code {
   text-align: center;
 }
 
-#pie-chart, #move-chart {
+#pie-chart, #line-chart {
   display: inline-block;
+  width: 50%;
+  padding: 2%;
+}
+
+.chart-name {
+  text-align: center;
+  padding: 5%;
+  font-size: 1.5rem;
 }
 
 /*# sourceMappingURL=style.css.map */

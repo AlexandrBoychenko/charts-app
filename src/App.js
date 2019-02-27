@@ -27,7 +27,7 @@ class App extends Component {
                         </h1>
                     </header>
                     <div className="main-content">
-                        {/*<ChartPie csvData={this.state.csvData}/>*/}
+                        <ChartPie csvData={this.state.csvData}/>
                         <ChartLine csvData={this.state.csvData}/>
                     </div>
                 </div>

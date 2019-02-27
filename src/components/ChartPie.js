@@ -10,6 +10,12 @@ class ChartPie extends Component {
         let ndx                 = crossfilter(this.props.csvData),
             runDimension        = ndx.dimension(function(d) {return d.item_category;}),
             markdownSumGroup    = runDimension.group().reduceSum(function(d) {return d.markdown;});
+
+        chart.width(function (element) {
+            let width = element && element.getBoundingClientRect && element.getBoundingClientRect().width * 0.8;
+            return (width && width > chart.minWidth()) ? width : chart.minWidth();
+        });
+
         chart
             .width(768)
             .height(480)
@@ -32,7 +38,9 @@ class ChartPie extends Component {
 
     render() {
         this.runChart();
-        return <div id="pie-chart">Pie Chart</div>
+        return <div id="pie-chart">
+            <p className="chart-name">Pie Chart</p>
+        </div>
     }
 }
 
