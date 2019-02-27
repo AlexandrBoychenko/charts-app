@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import dc from 'dc';
 import * as d3 from 'd3';
 import crossfilter from 'crossfilter';
+import { Helpers } from '../helpers';
 import '../style/style.css';
 
 class ChartLine extends Component {
@@ -14,10 +15,7 @@ class ChartLine extends Component {
 
         let xAxisRange = this.setAxisRange(runDimension, 'week_ref');
 
-        chart.width(function (element) {
-            let width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
-            return (width && width > chart.minWidth()) ? width : chart.minWidth();
-        });
+        chart.width((element) => Helpers.calcWidth(element, chart));
 
         chart
             .height(480)

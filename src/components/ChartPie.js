@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import dc from 'dc';
 import crossfilter from 'crossfilter';
+import { Helpers } from '../helpers';
 import '../style/style.css';
 
 class ChartPie extends Component {
@@ -11,13 +12,9 @@ class ChartPie extends Component {
             runDimension        = ndx.dimension(function(d) {return d.item_category;}),
             markdownSumGroup    = runDimension.group().reduceSum(function(d) {return d.markdown;});
 
-        chart.width(function (element) {
-            let width = element && element.getBoundingClientRect && element.getBoundingClientRect().width * 0.8;
-            return (width && width > chart.minWidth()) ? width : chart.minWidth();
-        });
+        chart.width((element) => Helpers.calcWidth(element, chart));
 
         chart
-            .width(768)
             .height(480)
             .innerRadius(100)
             .dimension(runDimension)
