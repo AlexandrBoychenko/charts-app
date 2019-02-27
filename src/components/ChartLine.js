@@ -5,30 +5,38 @@ import crossfilter from 'crossfilter';
 import '../style/style.css';
 
 class ChartLine extends Component {
-    runChart() {
+    componentDidUpdate() {
         let chart = dc.lineChart('#line-chart');
 
         let ndx                 = crossfilter(this.props.csvData),
             runDimension        = ndx.dimension(function(d) {return +d.week_ref;}),
-            speedSumGroup       = runDimension.group().reduceSum(function(d) {return d.markdown / 4000;});
+            speedSumGroup       = runDimension.group().reduceSum(function(d) {return d.markdown;});
+
+        let xAxisRange = this.setAxisRange(runDimension, 'week_ref');
+
         chart
             .width(768)
             .height(480)
-            .x(d3.scaleLinear().domain([0,52]))
-            .margins({top: 30, right: 60, bottom: 30, left: 70})
-            .renderArea(true)
+            .x(d3.scalePow().domain([xAxisRange.runMin, xAxisRange.runMax]))
+            .margins({top: 10, right: 70, bottom: 50, left: 60})
             .brushOn(false)
+            .xAxisLabel('Time')
+            .yAxisLabel('Markdown')
+            .renderArea(true)
             .renderDataPoints(true)
             .clipPadding(10)
-/*
-            .yAxisLabel("This is the Y Axis!")
-*/
             .dimension(runDimension)
             .group(speedSumGroup);
         chart.render();
     }
+
+    setAxisRange(runDimension, key) {
+        let runMin = +runDimension.bottom(1)[0][key];
+        let runMax = +runDimension.top(1)[0][key];
+        return {runMin, runMax}
+    }
+
     render() {
-        this.runChart();
         return (<div id="line-chart">Line chart</div>);
     }
 }
