@@ -10,20 +10,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.main-title {
-  text-align: center;
-}
-
-#pie-chart, #line-chart {
-  display: inline-block;
+.header-img {
   width: 50%;
-  padding: 2%;
 }
 
 .chart-name {
-  text-align: center;
-  padding: 5%;
   font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
 }
 
 /*# sourceMappingURL=style.css.map */
