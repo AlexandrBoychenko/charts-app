@@ -24,4 +24,8 @@ code {
   align-items: center;
 }
 
+li {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=style.css.map */

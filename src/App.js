@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Charts from './components/charts';
+import Dropdown from './components/dropdown'
 import * as d3 from 'd3';
 
 import './style/style.css';
@@ -8,8 +9,10 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            csvData: []
-        }
+            csvData: [],
+            parameter: ''
+        };
+        this.onAnswerChangeSelect = this.onAnswerChangeSelect.bind(this);
     }
 
     componentDidMount() {
@@ -17,6 +20,11 @@ class App extends Component {
                 this.setState({csvData: csvData})
         });
     }
+
+    onAnswerChangeSelect(selectedItem) {
+        this.setState({parameter: selectedItem});
+    }
+
     render() {
             return (
                     <div className="container">
@@ -34,21 +42,13 @@ class App extends Component {
                                  <p>Select category to display in charts:</p>
                             </div>
 
-                            <div className="col-md-2 header-controls">
-                                <div className="dropdown">
-                                    <button className="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Tutorials
-                                        <span className="caret"></span></button>
-                                    <ul className="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">HTML</a></li>
-                                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">CSS</a></li>
-                                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">JavaScript</a></li>
-                                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">About Us</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            <Dropdown onAnswerChangeSelect={this.onAnswerChangeSelect}/>
                         </div>
 
-                        <Charts csvData={this.state.csvData}/>
+                        <Charts
+                            csvData={this.state.csvData}
+                            parameter={this.state.parameter}
+                        />
                     </div>
             );
 
