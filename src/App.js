@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import ChartPie from './components/ChartPie';
-import ChartLine from './components/ChartLine';
+import Charts from './components/charts';
 import * as d3 from 'd3';
 
 import './style/style.css';
@@ -43,43 +42,14 @@ class App extends Component {
                                         <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">HTML</a></li>
                                         <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">CSS</a></li>
                                         <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">JavaScript</a></li>
-                                        <li role="presentation" className="divider"></li>
                                         <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">About Us</a></li>
                                     </ul>
                                 </div>
                             </div>
-
                         </div>
 
-                        <div className="row">
-
-                            <div className="col-md-7">
-
-                                <ChartPie csvData={this.state.csvData}/>
-
-                            </div>
-
-                            <div className="col-md-5">
-
-                                <ChartLine csvData={this.state.csvData}/>
-
-                            </div>
-
-                        </div>
-
+                        <Charts csvData={this.state.csvData}/>
                     </div>
-
-                   /*<div className="Charts">
-                        <header className="charts-header">
-                            <h1 className="main-title">
-                                Charts for retail
-                            </h1>
-                        </header>
-                        <div className="main-content">
-
-
-                        </div>
-                    </div>*/
             );
 
 
