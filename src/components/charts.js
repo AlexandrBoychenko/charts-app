@@ -74,14 +74,42 @@ class ChartLine extends Component {
 
     render() {
         return (
-            <div className="row">
-                <div id="pie-chart" className="col-md-6">
-                    <p className="chart-name">Pie Chart</p>
-                </div>
-                <div id="line-chart" className="col-md-6">
-                    <p className="chart-name">Line Chart</p>
+
+
+        <div className="content">
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-md-4">
+                        <div className="card">
+
+                            <div className="header">
+                                <h4 className="title">Email Statistics</h4>
+                                <p className="category">Last Campaign Performance</p>
+                            </div>
+                            <div className="content">
+                                <div id="pie-chart" className="ct-chart ct-perfect-fourth"></div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="col-md-8">
+                        <div className="card">
+                            <div className="header">
+                                <h4 className="title">Users Behavior</h4>
+                                <p className="category">24 Hours performance</p>
+                            </div>
+                            <div className="content">
+                                <div id="line-chart" className="ct-chart"></div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+
         );
     }
 }
