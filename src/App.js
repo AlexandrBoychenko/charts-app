@@ -51,7 +51,7 @@ class App extends Component {
                             <Dropdown onAnswerChangeSelect={this.onAnswerChangeSelect}/>
 
                             <div className="col-md-1 header-controls">
-                                <a className="reset" onClick={this.resetAll()}>Reset All</a>
+                                <a href="default.html" className="reset" onClick={this.resetAll()}>Reset All</a>
                             </div>
                         </div>
 

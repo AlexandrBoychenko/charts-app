@@ -32,7 +32,7 @@ class ChartLine extends Component {
                 chart.selectAll('text.pie-slice').text(function(d) {
                     let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
                     if (resultAngle >= 3)
-                        return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(10));
+                        return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
                 })
             });
 
@@ -43,8 +43,8 @@ class ChartLine extends Component {
         chartLine
             .height(480)
             .x(d3.scaleLinear().domain([xAxisRange.runMin, xAxisRange.runMax]))
-            .margins({top: 10, right: 10, bottom: 40, left: 60})
-            .xAxisLabel('Time')
+            .margins({top: 10, right: 10, bottom: 50, left: 60})
+            .xAxisLabel('Week Number')
             .yAxisLabel(`${parameter[0].toUpperCase() + parameter.slice(1)} Sum`)
             .renderDataPoints(true)
             .clipPadding(10)
