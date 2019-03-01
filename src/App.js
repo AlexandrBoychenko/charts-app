@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Charts from './components/charts';
 import Dropdown from './components/dropdown'
 import * as d3 from 'd3';
+import dc from 'dc';
 
 import './style/style.css';
 
@@ -25,6 +26,11 @@ class App extends Component {
         this.setState({parameter: selectedItem});
     }
 
+    resetAll() {
+        dc.filterAll();
+        dc.renderAll();
+    }
+
     render() {
             return (
                     <div className="container">
@@ -38,11 +44,15 @@ class App extends Component {
 
                             <div className="col-md-1"></div>
 
-                            <div className="col-md-5 header-controls">
+                            <div className="col-md-4 header-controls">
                                  <p>Select category to display in charts:</p>
                             </div>
 
                             <Dropdown onAnswerChangeSelect={this.onAnswerChangeSelect}/>
+
+                            <div className="col-md-1 header-controls">
+                                <a className="reset" onClick={this.resetAll()}>Reset All</a>
+                            </div>
                         </div>
 
                         <Charts

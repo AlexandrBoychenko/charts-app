@@ -6,10 +6,6 @@ import { Helpers } from '../helpers';
 import '../style/style.css';
 
 class ChartLine extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidUpdate() {
         let chartLine = dc.lineChart('#line-chart');
         let chartPie = dc.pieChart('#pie-chart');
@@ -32,11 +28,11 @@ class ChartLine extends Component {
             .drawPaths(true)
             .legend(dc.legend())
             // workaround for #703: not enough data is accessible through .label() to display percentages
-            .on('pretransition', function(chartLine) {
-                chartPie.selectAll('text.pie-slice').text(function(d) {
+            .on('pretransition', function(chart) {
+                chart.selectAll('text.pie-slice').text(function(d) {
                     let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
-                    if (resultAngle <= 3 ) {return}
-                    return dc.utils.printSingleValue(resultAngle) + '%';
+                    if (resultAngle >= 3)
+                        return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(10));
                 })
             });
 
@@ -47,14 +43,25 @@ class ChartLine extends Component {
         chartLine
             .height(480)
             .x(d3.scaleLinear().domain([xAxisRange.runMin, xAxisRange.runMax]))
-            .margins({top: 10, right: 10, bottom: 40, left: 50})
+            .margins({top: 10, right: 10, bottom: 40, left: 60})
             .xAxisLabel('Time')
             .yAxisLabel(`${parameter[0].toUpperCase() + parameter.slice(1)} Sum`)
-            //.renderArea(true)
             .renderDataPoints(true)
             .clipPadding(10)
             .dimension(runDimensionLinear)
-            .group(sumGroupLinear);
+            .group(sumGroupLinear)
+            .addFilterHandler(function(filters, filter) {
+                let binsIn = chartLine.group().all().filter(function(kv) {
+                    return filter.isFiltered(kv.key) && kv.value;
+                });
+                return binsIn.length ? [filter] : [];
+            })
+            .brush().on('brushend.no-empty', function() {
+                if(!chartLine.filters().length)
+                    window.setTimeout(function() {
+                        chartLine.filterAll().redraw();
+                    }, 100);
+            });
 
         dc.renderAll();
     }
