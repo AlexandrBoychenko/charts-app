@@ -32,37 +32,35 @@ class App extends Component {
     }
 
     render() {
-            return (
-                    <div className="container">
+        return (
+            <div className="container">
 
-                        <div className="row">
-                            <div className="col-md-3">
-                                <div className="media">
-                                    <img className="ml-5 header-img" src="img/the-official-chart-logo.png" alt=""/>
-                                </div>
-                            </div>
-
-                            <div className="col-md-1"></div>
-
-                            <div className="col-md-4 header-controls">
-                                 <p>Select category to display in charts:</p>
-                            </div>
-
-                            <Dropdown onAnswerChangeSelect={this.onAnswerChangeSelect}/>
-
-                            <div className="col-md-1 header-controls">
-                                <a href="default.html" className="reset" onClick={this.resetAll()}>Reset All</a>
-                            </div>
+                <div className="row">
+                    <div className="col-md-3">
+                        <div className="media">
+                            <img className="ml-5 header-img" src="img/the-official-chart-logo.png" alt=""/>
                         </div>
-
-                        <Charts
-                            csvData={this.state.csvData}
-                            parameter={this.state.parameter}
-                        />
                     </div>
-            );
 
+                    <div className="col-md-1"></div>
 
+                    <div className="col-md-4 header-controls">
+                         <p>Select category to display in charts:</p>
+                    </div>
+
+                    <Dropdown onAnswerChangeSelect={this.onAnswerChangeSelect}/>
+
+                    <div className="col-md-1 header-controls">
+                        <a href="default.html" className="reset" onClick={this.resetAll()}>Reset All</a>
+                    </div>
+                </div>
+
+                <Charts
+                    csvData={this.state.csvData}
+                    parameter={this.state.parameter}
+                />
+            </div>
+        );
     }
 }
 
