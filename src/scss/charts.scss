@@ -1,33 +1,3 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
-.header-img {
-  width: 50%;
-}
-
-.chart-name {
-  font-size: 1.5rem;
-  font-weight: 900;
-}
-
-.header-controls {
-  display: flex;
-  align-items: center;
-}
-
-li {
-  cursor: pointer;
-}
-
 .charts {
   padding: 10px 0;
 }
@@ -53,31 +23,31 @@ li {
   stroke: #000;
   shape-rendering: crispEdges;
 }
-
 /*dont display yAxis for categorical variable*/
+
 #chart .y.axis g {
   display: none;
 }
-
 /*Labels in categorical chart */
+
 text#catTitle.catTitle {
   font: 10px sans-serif;
   fill: white;
 }
-
 /*Color for the brush */
+
 .brush rect.extent {
   fill: steelblue;
-  fill-opacity: 0.125;
+  fill-opacity: .125;
 }
-
 /*Color for the brush resize path*/
+
 .brush .resize path {
   fill: #eee;
   stroke: #666;
 }
-
 /*Color for the hidden object*/
+
 .hidden {
   fill: grey;
 }
@@ -91,5 +61,3 @@ path.line {
   stroke: green;
   stroke-width: 1.5px;
 }
-
-/*# sourceMappingURL=style.css.map */
