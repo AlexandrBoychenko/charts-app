@@ -32,8 +32,5 @@
   "homepage": "https://alexandrboychenko.github.io/charts-app",
   "devDependencies": {
     "gh-pages": "^2.0.1"
-  },
-  "config": {
-    "unsafe-perm": true
   }
 }

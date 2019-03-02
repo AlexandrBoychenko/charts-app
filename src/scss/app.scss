@@ -1,25 +1,3 @@
-.header-img {
-  width: 50%;
-}
-
-.chart-name {
-  font-size: 1.5rem;
-  font-weight: 900;
-}
-
-.header-controls {
-  display: flex;
-  align-items: center;
-}
-
-.header-controls > * {
-  margin: auto;
-}
-
-li {
-  cursor: pointer;
-}
-
 #pie-chart, #line-chart {
   height: 100%;
   margin-bottom: 15px;
@@ -42,5 +20,3 @@ li {
   opacity: 1;
   text-decoration: none;
 }
-
-

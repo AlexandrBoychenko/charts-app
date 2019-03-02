@@ -10,24 +10,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.header-img {
-  width: 50%;
-}
-
-.chart-name {
-  font-size: 1.5rem;
-  font-weight: 900;
-}
-
-.header-controls {
-  display: flex;
-  align-items: center;
-}
-
-.header-controls > * {
-  margin: auto;
-}
-
 li {
   cursor: pointer;
 }
@@ -53,15 +35,6 @@ li {
   color: #1DC7EA;
   opacity: 1;
   text-decoration: none;
-}
-
-.charts {
-  padding: 10px 0;
-}
-
-.chart {
-  padding-left: 20px;
-  padding-top: 10px;
 }
 
 .axis text {
