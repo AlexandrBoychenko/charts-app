@@ -1,7 +1,9 @@
 class Helpers {
-    static calcWidth(element, chart) {
+
+    //Set height for desktop or mobile
+    static calcHeight(element) {
         let width = element && element.getBoundingClientRect && element.getBoundingClientRect().width;
-        return (width && width > chart.minWidth()) ? width : chart.minWidth()
+        return (width && width < 400) ? 200 : 300
     }
 
     static capitalizeFirstLetter(string) {

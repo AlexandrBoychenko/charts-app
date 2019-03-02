@@ -37,6 +37,24 @@ li {
   margin-bottom: 15px;
 }
 
+.div-link {
+  border: 0;
+  vertical-align: baseline;
+  color: #9A9A9A;
+  padding: 10px 15px;
+  margin: 10px 3px;
+  position: relative;
+  line-height: 20px;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.div-link:hover {
+  color: #1DC7EA;
+  opacity: 1;
+  text-decoration: none;
+}
+
 .charts {
   padding: 10px 0;
 }

@@ -72,9 +72,9 @@ class App extends Component {
                                 <ul className="nav navbar-nav navbar-right">
 
                                     <li>
-                                        <a onClick={this.resetAll}>
+                                        <div className="div-link" onClick={this.resetAll}>
                                             <p>Reset All</p>
-                                        </a>
+                                        </div>
                                     </li>
 
                                     <Dropdown

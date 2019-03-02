@@ -25,10 +25,8 @@ class ChartLine extends Component {
             runDimensionPie             = ndx.dimension(function(d) {return d.item_category;}),
             SumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];});
 
-        chartLine.width((element) => Helpers.calcWidth(element, chartPie));
-
         chartPie
-            .height(300)
+            .height((element) => Helpers.calcHeight(element))
             .innerRadius(50)
             .dimension(runDimensionPie)
             .group(SumGroupPie)
@@ -45,10 +43,8 @@ class ChartLine extends Component {
 
         let xAxisRange = this.setAxisRange(runDimensionLinear, 'week_ref');
 
-        chartLine.width((element) => Helpers.calcWidth(element, chartLine));
-
         chartLine
-            .height(300)
+            .height((element) => Helpers.calcHeight(element))
             .x(d3.scaleLinear().domain([xAxisRange.runMin, xAxisRange.runMax]))
             .margins({top: 10, right: 10, bottom: 50, left: 60})
             .xAxisLabel('Week Number')
@@ -92,7 +88,7 @@ class ChartLine extends Component {
                                             Helpers.capitalizeFirstLetter(Helpers.returnValue(this.props.parameter, 'markdown'))
                                             + ' Statistics'}
                                     </h4>
-                                    <p className="category">Last Campaign Performance</p>
+                                    <p className="category">For all categories</p>
                                 </div>
                                 <div className="content">
                                     <div id="pie-chart" className="ct-chart"></div>

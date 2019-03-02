@@ -24,9 +24,9 @@ class Dropdown extends Component {
                     </p>
                 </a>
                 <ul className="dropdown-menu">
-                    <li><a onClick={this.handleChangeSelect}>Markdown</a></li>
-                    <li><a onClick={this.handleChangeSelect}>Revenues</a></li>
-                    <li><a onClick={this.handleChangeSelect}>Margin</a></li>
+                    <li><div className="div-link" onClick={this.handleChangeSelect}>Markdown</div></li>
+                    <li><div className="div-link" onClick={this.handleChangeSelect}>Revenues</div></li>
+                    <li><div className="div-link" onClick={this.handleChangeSelect}>Margin</div></li>
                 </ul>
             </li>
         );
