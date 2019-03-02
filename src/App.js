@@ -58,14 +58,13 @@ class App extends Component {
                     <nav className="navbar navbar-default navbar-fixed">
                         <div className="container-fluid">
                             <div className="navbar-header">
-                                <a className="navbar-brand" href="#">Dashboard</a>
+                                <a className="navbar-brand" href="index.html">Dashboard</a>
                             </div>
                             <div className="collapse navbar-collapse">
                                 <ul className="nav navbar-nav navbar-left">
                                     <li>
-                                        <a href="#" className="dropdown-toggle" data-toggle="dropdown">
+                                        <a href="index.html" className="dropdown-toggle" data-toggle="dropdown">
                                             <i className="fa fa-dashboard"></i>
-                                            <p className="hidden-lg hidden-md">Dashboard</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -73,23 +72,13 @@ class App extends Component {
                                 <ul className="nav navbar-nav navbar-right">
 
                                     <li>
-                                        <a href="">
+                                        <a onClick={this.resetAll}>
                                             <p>Reset All</p>
                                         </a>
                                     </li>
-                                    <li className="dropdown">
-                                        <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                                            <p>
-                                                Select Category
-                                                <b className="caret"></b>
-                                            </p>
-                                        </a>
-                                        <ul className="dropdown-menu">
-                                            <li><a href="#">Markdown</a></li>
-                                            <li><a href="#">Revenues</a></li>
-                                            <li><a href="#">Margin</a></li>
-                                        </ul>
-                                    </li>
+
+                                    <Dropdown
+                                        onAnswerChangeSelect = {this.onAnswerChangeSelect} />
 
                                     <li className="separator hidden-lg"></li>
                                 </ul>

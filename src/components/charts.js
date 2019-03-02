@@ -33,7 +33,7 @@ class ChartLine extends Component {
             .dimension(runDimensionPie)
             .group(SumGroupPie)
             .drawPaths(true)
-            .legend(dc.legend())
+            .legend(dc.legend().autoItemWidth(true))
             // workaround for #703: not enough data is accessible through .label() to display percentages
             .on('pretransition', function(chart) {
                 chart.selectAll('text.pie-slice').text(function(d) {
@@ -81,43 +81,40 @@ class ChartLine extends Component {
 
     render() {
         return (
-
-
-        <div className="content">
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-6">
-                        <div className="card">
-                            <div className="header">
-                                <h4 className="title">
-                                    {
-                                        Helpers.capitalizeFirstLetter(Helpers.returnValue(this.props.parameter, 'markdown'))
-                                        + ' Statistics'}
-                                </h4>
-                                <p className="category">Last Campaign Performance</p>
-                            </div>
-                            <div className="content">
-                                <div id="pie-chart" className="ct-chart"></div>
+            <div className="content">
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="card">
+                                <div className="header">
+                                    <h4 className="title">
+                                        {
+                                            Helpers.capitalizeFirstLetter(Helpers.returnValue(this.props.parameter, 'markdown'))
+                                            + ' Statistics'}
+                                    </h4>
+                                    <p className="category">Last Campaign Performance</p>
+                                </div>
+                                <div className="content">
+                                    <div id="pie-chart" className="ct-chart"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="col-md-6">
-                        <div className="card">
-                            <div className="header">
-                                <h4 className="title">Time Line Chart</h4>
-                                <p className="category">Actual data for {
-                                    Helpers.returnValue(this.props.csvData[0] && this.props.csvData[0]['year_ref'], '2014')}</p>
-                            </div>
-                            <div className="content">
-                                <div id="line-chart" className="ct-chart"></div>
+                        <div className="col-md-6">
+                            <div className="card">
+                                <div className="header">
+                                    <h4 className="title">Time Line Chart</h4>
+                                    <p className="category">Actual data for {
+                                        Helpers.returnValue(this.props.csvData[0] && this.props.csvData[0]['year_ref'], '2014')}</p>
+                                </div>
+                                <div className="content">
+                                    <div id="line-chart" className="ct-chart"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
         );
     }
 }

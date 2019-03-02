@@ -16,20 +16,19 @@ class Dropdown extends Component {
 
     render() {
         return (
-            <div className="col-md-2 header-controls">
-                <div className="dropdown">
-                    <button className="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Parameter
-                        <span className="caret"></span></button>
-                    <ul
-                        className="dropdown-menu"
-                        role="menu"
-                        aria-labelledby="menu1">
-                        <li role="presentation" onClick={this.handleChangeSelect}>Markdown</li>
-                        <li role="presentation" onClick={this.handleChangeSelect}>Revenues</li>
-                        <li role="presentation" onClick={this.handleChangeSelect}>Margin</li>
-                    </ul>
-                </div>
-            </div>
+            <li className="dropdown">
+                <a href="index.html" className="dropdown-toggle" data-toggle="dropdown">
+                    <p>
+                        Select Category
+                        <b className="caret"></b>
+                    </p>
+                </a>
+                <ul className="dropdown-menu">
+                    <li><a onClick={this.handleChangeSelect}>Markdown</a></li>
+                    <li><a onClick={this.handleChangeSelect}>Revenues</a></li>
+                    <li><a onClick={this.handleChangeSelect}>Margin</a></li>
+                </ul>
+            </li>
         );
 
 
