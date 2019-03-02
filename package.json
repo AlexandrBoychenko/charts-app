@@ -16,6 +16,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "scss": "sass ./src/scss/main.scss ./src/style/style.css"
   },
   "eslintConfig": {
@@ -27,6 +29,10 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "homepage": "https://alexandrboychenko.github.io/charts-app",
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  },
   "config": {
     "unsafe-perm": true
   }
