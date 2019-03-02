@@ -36,7 +36,6 @@ class App extends Component {
             <div className="wrapper">
                 <div className="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
 
-                    
                     <div className="sidebar-wrapper">
                         <div className="logo">
                             <a href="http://www.creative-tim.com" className="simple-text">
@@ -58,6 +57,9 @@ class App extends Component {
                 <div className="main-panel">
                     <nav className="navbar navbar-default navbar-fixed">
                         <div className="container-fluid">
+                            <div className="navbar-header">
+                                <a className="navbar-brand" href="#">Dashboard</a>
+                            </div>
                             <div className="collapse navbar-collapse">
                                 <ul className="nav navbar-nav navbar-left">
                                     <li>
@@ -70,22 +72,22 @@ class App extends Component {
 
                                 <ul className="nav navbar-nav navbar-right">
 
+                                    <li>
+                                        <a href="">
+                                            <p>Reset All</p>
+                                        </a>
+                                    </li>
                                     <li className="dropdown">
                                         <a href="#" className="dropdown-toggle" data-toggle="dropdown">
                                             <p>
-                                                Dropdown
+                                                Select Category
                                                 <b className="caret"></b>
                                             </p>
-
                                         </a>
                                         <ul className="dropdown-menu">
-                                            <li><a href="#">Action</a></li>
-                                            <li><a href="#">Another action</a></li>
-                                            <li><a href="#">Something</a></li>
-                                            <li><a href="#">Another action</a></li>
-                                            <li><a href="#">Something</a></li>
-                                            <li className="divider"></li>
-                                            <li><a href="#">Separated link</a></li>
+                                            <li><a href="#">Markdown</a></li>
+                                            <li><a href="#">Revenues</a></li>
+                                            <li><a href="#">Margin</a></li>
                                         </ul>
                                     </li>
 
@@ -95,7 +97,6 @@ class App extends Component {
                         </div>
                     </nav>
 
-
                     <Charts
                         csvData={this.state.csvData}
                         parameter={this.state.parameter}
@@ -103,30 +104,6 @@ class App extends Component {
 
                     <footer className="footer">
                         <div className="container-fluid">
-                            <nav className="pull-left">
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            Home
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Company
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Portfolio
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            Blog
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
                             <p className="copyright pull-right">
                                 &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
                             </p>

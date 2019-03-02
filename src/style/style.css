@@ -32,6 +32,11 @@ li {
   cursor: pointer;
 }
 
+#pie-chart, #line-chart {
+  height: 100%;
+  margin-bottom: 15px;
+}
+
 .charts {
   padding: 10px 0;
 }
