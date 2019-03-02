@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/charts-app/static/css/main.27001ab8.chunk.css"
   },
   {
-    "revision": "f692a26cda3a37dcca279882140a28c1",
+    "revision": "f5f466fc10f6c292871ed31cf63e1786",
     "url": "/charts-app/index.html"
   }
 ];
