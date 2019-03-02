@@ -4,19 +4,19 @@ self.__precacheManifest = [
     "url": "/charts-app/static/js/runtime~main.7130d9b0.js"
   },
   {
-    "revision": "2125eeb8483018783893",
-    "url": "/charts-app/static/js/main.2125eeb8.chunk.js"
+    "revision": "79e663d43ec7b066678e",
+    "url": "/charts-app/static/js/main.79e663d4.chunk.js"
   },
   {
     "revision": "0da440b1e891d0dc0cef",
     "url": "/charts-app/static/js/2.0da440b1.chunk.js"
   },
   {
-    "revision": "2125eeb8483018783893",
-    "url": "/charts-app/static/css/main.27001ab8.chunk.css"
+    "revision": "79e663d43ec7b066678e",
+    "url": "/charts-app/static/css/main.1aa6e2cf.chunk.css"
   },
   {
-    "revision": "9df7804f5df12a942a329ddc8d5d404d",
+    "revision": "df228815128eaae2b8359ab2847678f1",
     "url": "/charts-app/index.html"
   }
 ];
