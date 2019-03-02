@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import '../style/style.css';
 
 class Dropdown extends Component {
@@ -11,7 +10,7 @@ class Dropdown extends Component {
     componentDidMount() {}
 
     handleChangeSelect(e) {
-        this.props.onAnswerChangeSelect(e.target.textContent.toLowerCase());
+        this.props.onChangeSelect(e.target.textContent.toLowerCase());
     }
 
     render() {
@@ -30,8 +29,6 @@ class Dropdown extends Component {
                 </ul>
             </li>
         );
-
-
     }
 }
 

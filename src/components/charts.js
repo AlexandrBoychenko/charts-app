@@ -80,13 +80,12 @@ class ChartLine extends Component {
             <div className="content">
                 <div className="container-fluid">
                     <div className="row">
+
                         <div className="col-md-6">
                             <div className="card">
                                 <div className="header">
                                     <h4 className="title">
-                                        {
-                                            Helpers.capitalizeFirstLetter(Helpers.returnValue(this.props.parameter, 'markdown'))
-                                            + ' Statistics'}
+                                        { Helpers.capitalizeFirstLetter(Helpers.returnValue(this.props.parameter, 'markdown')) + ' Statistics' }
                                     </h4>
                                     <p className="category">For all categories</p>
                                 </div>
@@ -108,6 +107,7 @@ class ChartLine extends Component {
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

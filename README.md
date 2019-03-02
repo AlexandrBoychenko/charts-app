@@ -1,3 +1,13 @@
+## Crossfilter via dc.js
+
+This visualization is intended as a demonstration for describing the use of [crossfilter](https://square.github.io/crossfilter/) via [dc.js](https://nickqizhu.github.io/dc.js/).
+
+It includes some types of graphs possible with [dc.js](https://nickqizhu.github.io/dc.js/).
+
+It is wrapped by [react.js](https://reactjs.org/), [bootstrap](https://getbootstrap.com/) and dashboard template [creative-tim](https://www.creative-tim.com/)
+
+The data is from abstract retail table for only practice purposes.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

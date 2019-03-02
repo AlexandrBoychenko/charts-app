@@ -13,7 +13,7 @@ class App extends Component {
             csvData: [],
             parameter: ''
         };
-        this.onAnswerChangeSelect = this.onAnswerChangeSelect.bind(this);
+        this.onChangeSelect = this.onChangeSelect.bind(this);
     }
 
     componentDidMount() {
@@ -22,7 +22,7 @@ class App extends Component {
         });
     }
 
-    onAnswerChangeSelect(selectedItem) {
+    onChangeSelect(selectedItem) {
         this.setState({parameter: selectedItem});
     }
 
@@ -35,7 +35,6 @@ class App extends Component {
         return (
             <div className="wrapper">
                 <div className="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
-
                     <div className="sidebar-wrapper">
                         <div className="logo">
                             <a href="http://www.creative-tim.com" className="simple-text">
@@ -45,7 +44,7 @@ class App extends Component {
 
                         <ul className="nav">
                             <li className="active">
-                                <a href="dashboard.html">
+                                <a href="index.html">
                                     <i className="pe-7s-graph"></i>
                                     <p>Dashboard</p>
                                 </a>
@@ -68,19 +67,15 @@ class App extends Component {
                                         </a>
                                     </li>
                                 </ul>
-
                                 <ul className="nav navbar-nav navbar-right">
-
                                     <li>
                                         <div className="div-link" onClick={this.resetAll}>
                                             <p>Reset All</p>
                                         </div>
                                     </li>
 
-                                    <Dropdown
-                                        onAnswerChangeSelect = {this.onAnswerChangeSelect} />
+                                    <Dropdown onChangeSelect = {this.onChangeSelect} />
 
-                                    <li className="separator hidden-lg"></li>
                                 </ul>
                             </div>
                         </div>
@@ -99,7 +94,6 @@ class App extends Component {
                         </div>
                     </footer>
                 </div>
-
             </div>
         );
     }
