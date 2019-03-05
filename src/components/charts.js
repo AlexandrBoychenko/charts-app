@@ -32,7 +32,7 @@ class ChartLine extends Component {
             .group(SumGroupPie)
             .drawPaths(true)
             .legend(dc.legend().autoItemWidth(true))
-            // workaround for #703: not enough data is accessible through .label() to display percentages
+            //workaround for #703: not enough data is accessible through .label() to display percentages
             .on('pretransition', function(chart) {
                 chart.selectAll('text.pie-slice').text(function(d) {
                     let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
@@ -59,6 +59,7 @@ class ChartLine extends Component {
                 });
                 return binsIn.length ? [filter] : [];
             })
+            //apply brush filter
             .brush().on('brushend.no-empty', function() {
                 if(!chartLine.filters().length)
                     window.setTimeout(function() {
@@ -67,6 +68,9 @@ class ChartLine extends Component {
             });
 
         dc.renderAll();
+
+        //for redraw charts on resize
+        window.addEventListener('resize', () => { dc.renderAll() });
     }
 
     setAxisRange(runDimensionLinear, key) {

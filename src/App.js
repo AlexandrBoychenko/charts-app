@@ -57,16 +57,9 @@ class App extends Component {
                     <nav className="navbar navbar-default navbar-fixed">
                         <div className="container-fluid">
                             <div className="navbar-header">
-                                <a className="navbar-brand" href="index.html">Dashboard</a>
+                                <a className="navbar-brand" href="index.html">Statistics Dashboard</a>
                             </div>
-                            <div className="collapse navbar-collapse">
-                                <ul className="nav navbar-nav navbar-left">
-                                    <li>
-                                        <a href="index.html" className="dropdown-toggle" data-toggle="dropdown">
-                                            <i className="fa fa-dashboard"></i>
-                                        </a>
-                                    </li>
-                                </ul>
+                            <div>
                                 <ul className="nav navbar-nav navbar-right">
                                     <li>
                                         <div className="div-link" onClick={this.resetAll}>

@@ -17,6 +17,7 @@ li {
 #pie-chart, #line-chart {
   height: 100%;
   margin-bottom: 15px;
+  touch-action: none;
 }
 
 .div-link {
