@@ -1,1 +1,2 @@
+special-vendored-path/* linguist-vendored
 public/assets/* linguist-vendored=false
