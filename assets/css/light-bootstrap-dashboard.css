@@ -3322,7 +3322,7 @@ fieldset[disabled] .btn-neutral.active {
     .navbar-nav > li {
         float: none;
         position: relative;
-        display: block;
+        display: inline-block;
     }
     .navbar-collapse,
     .sidebar {
