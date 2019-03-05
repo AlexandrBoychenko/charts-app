@@ -21,3 +21,16 @@
   opacity: 1;
   text-decoration: none;
 }
+
+.inner-list-item {
+  margin-bottom: 0;
+}
+
+.container-header {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.header-item-right {
+  margin-left: auto;
+}

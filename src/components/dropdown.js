@@ -17,7 +17,7 @@ class Dropdown extends Component {
         return (
             <li className="dropdown">
                 <a href="index.html" className="dropdown-toggle" data-toggle="dropdown">
-                    <p>
+                    <p className="inner-list-item">
                         Select Category
                         <b className="caret"></b>
                     </p>

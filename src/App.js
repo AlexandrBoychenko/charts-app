@@ -55,15 +55,15 @@ class App extends Component {
 
                 <div className="main-panel">
                     <nav className="navbar navbar-default navbar-fixed">
-                        <div className="container-fluid">
+                        <div className="container-fluid container-header">
                             <div className="navbar-header">
                                 <a className="navbar-brand" href="index.html">Statistics Dashboard</a>
                             </div>
-                            <div>
+                            <div className="header-item-right">
                                 <ul className="nav navbar-nav navbar-right">
                                     <li>
                                         <div className="div-link" onClick={this.resetAll}>
-                                            <p>Reset All</p>
+                                            <p className="inner-list-item">Reset All</p>
                                         </div>
                                     </li>
 
