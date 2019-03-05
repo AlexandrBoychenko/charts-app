@@ -17,6 +17,9 @@ li {
 #pie-chart, #line-chart {
   height: 100%;
   margin-bottom: 15px;
+}
+
+#line-chart {
   touch-action: none;
 }
 
@@ -49,11 +52,16 @@ li {
 
 .header-item-right {
   margin-left: auto;
+  margin-right: 20px;
 }
 
 .axis text {
   font: 10px sans-serif;
   fill: black;
+}
+
+.axisRed {
+  fill: red;
 }
 
 .chart text {
@@ -100,9 +108,10 @@ text#catTitle.catTitle {
   fill: steelblue;
 }
 
+/*line color*/
 path.line {
   fill: none;
-  stroke: green;
+  /*stroke: green;*/
   stroke-width: 1.5px;
 }
 

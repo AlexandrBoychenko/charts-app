@@ -1,6 +1,9 @@
 #pie-chart, #line-chart {
   height: 100%;
   margin-bottom: 15px;
+}
+
+#line-chart {
   touch-action: none;
 }
 
@@ -33,4 +36,5 @@
 
 .header-item-right {
   margin-left: auto;
+  margin-right: 20px;
 }
