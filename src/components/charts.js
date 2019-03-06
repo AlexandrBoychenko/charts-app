@@ -3,6 +3,7 @@ import dc from 'dc';
 import * as d3 from 'd3';
 import crossfilter from 'crossfilter';
 import { Helpers } from '../helpers';
+import colors from '../colors';
 import '../style/style.css';
 
 class ChartLine extends Component {
@@ -23,6 +24,7 @@ class ChartLine extends Component {
 
         let pieHeader = this.myRef.current;
         let parameter = Helpers.returnValue(this.props.parameter, 'markdown');
+        let prevFilter;
 
         let ndx                         = crossfilter(this.props.csvData),
             runDimensionLinear          = ndx.dimension(function(d) {return +d.week_ref;}),
@@ -30,10 +32,7 @@ class ChartLine extends Component {
             runDimensionPie             = ndx.dimension(function(d) {return d.item_category;}),
             SumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];});
 
-        let pieValues = SumGroupPie.all().map(function(d) { return d.key });
-        let colors = ['rgb(43, 137, 9)', 'rgb(239, 2, 2)', 'rgb(8, 24, 145)', 'rgb(56, 119, 91)'];
-        let currentColor = colors[this.choseColor(parameter)];
-        let currentCategory;
+        let categoriesOrder =[];
 
         chartPie
             .height((element) => Helpers.calcHeight(element))
@@ -42,15 +41,32 @@ class ChartLine extends Component {
             .group(SumGroupPie)
             .drawPaths(true)
             .legend(dc.legend())
+            .ordinalColors(colors)
             //workaround for #703: not enough data is accessible through .label() to display percentages
-            .on('pretransition', function(chart) {
+            .on('pretransition', (chart) => {
                 chart.selectAll('text.pie-slice').text(function(d) {
                     let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
-                    currentCategory = d.data.key;
-                    chartLine.colorAccessor(() => {return pieValues.indexOf(currentCategory)});
                     if (resultAngle >= 3)
                         return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
-                })
+                });
+            })
+            .on('filtered.monitor', (chart, filter) => {
+                if (!filter || prevFilter === filter) {
+                    prevFilter = '';
+                    pieHeader.innerText = this.state.initialPieText;
+                    chartLine.yAxisLabel(`All ${Helpers.capitalizeFirstLetter(parameter)}`)
+                } else {
+                    chartLine.yAxisLabel(`${filter || 'All'}  ${Helpers.capitalizeFirstLetter(parameter)}`)
+                    prevFilter = filter;
+                }
+
+                chart.selectAll('text.pie-slice').text(function(d, i) {
+                    categoriesOrder.push(d.data.key);
+                });
+                chartLine.colorAccessor(() => {
+                    return categoriesOrder.indexOf(filter)
+                });
+                dc.renderAll();
             });
 
         let xAxisRange = this.setAxisRange(runDimensionLinear, 'week_ref');
@@ -60,28 +76,19 @@ class ChartLine extends Component {
             .x(d3.scaleLinear().domain([xAxisRange.runMin, xAxisRange.runMax]))
             .margins({top: 10, right: 10, bottom: 50, left: 60})
             .xAxisLabel('Week Number')
-            .yAxisLabel(`Common ${Helpers.capitalizeFirstLetter(parameter)} Sum`)
+            .yAxisLabel(`All ${Helpers.capitalizeFirstLetter(parameter)}`)
             .renderDataPoints(true)
             .clipPadding(10)
             .dimension(runDimensionLinear)
             .group(sumGroupLinear)
-            //.colors(colors)
-            .colorAccessor(/*{ return this.choseColor(parameter) }*/
-                (d, i) => {
-                    let indexCategory = pieValues.indexOf(this.props.csvData[i].item_category);
-                    if (indexCategory && currentCategory) {
-                        return pieValues.indexOf(currentCategory);
-                    } else {
-                        return this.choseColor(parameter);
-                    }
-                })
-            .colorDomain ([0,3])
+            .colors(colors)
+            .colorDomain ([0,16])
             .addFilterHandler((filters, filter) => {
+                pieHeader.innerText = this.state.initialPieText;
                 let binsIn = chartLine.group().all().filter(function(kv) {
                     return filter.isFiltered(kv.key) && kv.value;
                 });
-                this.handlePieText(filter, binsIn, pieHeader)
-
+                this.handlePieText(filter, binsIn, pieHeader);
                 return binsIn.length ? [filter] : [];
             })
             //apply brush filter
@@ -91,32 +98,16 @@ class ChartLine extends Component {
                         chartLine.filterAll().redraw();
                     }, 100);
             });
-
         dc.renderAll();
-        this.changeAxisLabelColor(currentColor);
 
         //for redraw charts on resize
-        this.changeOnResize(currentColor);
+        this.changeOnResize();
     }
 
-    changeOnResize(currentColor) {
+    changeOnResize() {
         window.addEventListener('resize', () => {
             dc.renderAll();
-            this.changeAxisLabelColor(currentColor);
         });
-    }
-
-    changeAxisLabelColor(currentColor) {
-        d3.select('.y-axis-label').style('fill', currentColor);
-    }
-
-    choseColor(parameter) {
-        switch (parameter) {
-            case 'markdown': return 0;
-            case 'revenues': return 1;
-            case 'margin': return 2;
-            default: return 3;
-        }
     }
 
     setAxisRange(runDimensionLinear, key) {
