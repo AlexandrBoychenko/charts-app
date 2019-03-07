@@ -115,4 +115,10 @@ path.line {
   stroke-width: 1.5px;
 }
 
+/*selected pie slice*/
+.pie-selected {
+  stroke: white;
+  stroke-width: 7;
+}
+
 /*# sourceMappingURL=style.css.map */

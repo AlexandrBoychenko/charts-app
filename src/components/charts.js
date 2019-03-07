@@ -16,15 +16,13 @@ class ChartLine extends Component {
         this.myRef = React.createRef();
     }
 
-
-
     componentDidUpdate() {
         let chartLine = dc.lineChart('#line-chart');
         let chartPie = dc.pieChart('#pie-chart');
 
         let pieHeader = this.myRef.current;
         let parameter = Helpers.returnValue(this.props.parameter, 'markdown');
-        let prevFilter;
+        let prevFilters = [];
 
         let ndx                         = crossfilter(this.props.csvData),
             runDimensionLinear          = ndx.dimension(function(d) {return +d.week_ref;}),
@@ -39,7 +37,6 @@ class ChartLine extends Component {
             .innerRadius(50)
             .dimension(runDimensionPie)
             .group(SumGroupPie)
-            .drawPaths(true)
             .legend(dc.legend())
             .ordinalColors(colors)
             //workaround for #703: not enough data is accessible through .label() to display percentages
@@ -51,22 +48,45 @@ class ChartLine extends Component {
                 });
             })
             .on('filtered.monitor', (chart, filter) => {
-                if (!filter || prevFilter === filter) {
-                    prevFilter = '';
-                    pieHeader.innerText = this.state.initialPieText;
-                    chartLine.yAxisLabel(`All ${Helpers.capitalizeFirstLetter(parameter)}`)
+                if (~prevFilters.indexOf(filter)) {
+                    //remove prevFilters value if it unchecked
+                    prevFilters.splice(prevFilters.indexOf(filter), 1);
+                    if (!prevFilters.length) {
+                        //set initial texts id all pie slices are unchecked
+                        chartLine.yAxisLabel(`All ${Helpers.capitalizeFirstLetter(parameter)}`)
+                    }
                 } else {
-                    chartLine.yAxisLabel(`${filter || 'All'}  ${Helpers.capitalizeFirstLetter(parameter)}`)
-                    prevFilter = filter;
+                    //add one filter to comparison array
+                    prevFilters.push(filter);
                 }
 
-                chart.selectAll('text.pie-slice').text(function(d, i) {
+                chartLine.yAxisLabel(`${this.isMoreValue(prevFilters) || 'All'}  ${Helpers.capitalizeFirstLetter(parameter)} Sum`);
+
+                chart.selectAll('g.pie-slice > path').attr('class', function(d) {
+                    if (~prevFilters.indexOf(d.data.key)) {
+                        return 'pie-selected';
+                    } else {
+                        return null;
+                    }
+                });
+
+                if (!filter) {
+                    pieHeader.innerText = this.state.initialPieText;
+                    prevFilters = [];
+                }
+
+                //push names of the groups to array that indicates current color's order
+                chart.selectAll('text.pie-slice').text(function(d) {
                     categoriesOrder.push(d.data.key);
                 });
+                //return color index that matches index in the current color array
                 chartLine.colorAccessor(() => {
                     return categoriesOrder.indexOf(filter)
                 });
-                dc.renderAll();
+                chartLine.render();
+
+                console.log(chart.selectAll('g.pie-slice > path'));
+
             });
 
         let xAxisRange = this.setAxisRange(runDimensionLinear, 'week_ref');
@@ -76,7 +96,7 @@ class ChartLine extends Component {
             .x(d3.scaleLinear().domain([xAxisRange.runMin, xAxisRange.runMax]))
             .margins({top: 10, right: 10, bottom: 50, left: 60})
             .xAxisLabel('Week Number')
-            .yAxisLabel(`All ${Helpers.capitalizeFirstLetter(parameter)}`)
+            .yAxisLabel(`All ${Helpers.capitalizeFirstLetter(parameter)} Sum`)
             .renderDataPoints(true)
             .clipPadding(10)
             .dimension(runDimensionLinear)
@@ -110,12 +130,17 @@ class ChartLine extends Component {
         });
     }
 
+    isMoreValue(prevFilters) {
+        return (prevFilters.length > 1) ? 'Selected' : prevFilters[0];
+    }
+
     setAxisRange(runDimensionLinear, key) {
         let runMin = +runDimensionLinear.bottom(1)[0][key];
         let runMax = +runDimensionLinear.top(1)[0][key];
         return {runMin, runMax}
     }
 
+    //display text in the pie header in correct range from the brush select tool in the line chart
     handlePieText(filter, binsIn, pieHeader) {
         let firstValue = Math.ceil(filter[0]);
         let secondValue = Math.floor(filter[filter.length - 1]);
