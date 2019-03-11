@@ -28,6 +28,7 @@ class ChartLine extends Component {
         let pieHeader = this.myRef.current;
         let parameter = Helpers.returnValue(this.props.parameter, 'markdown');
         let prevFilters = [];
+        let dataRangeText = [];
 
         let ndx                         = crossfilter(this.props.csvData),
             runDimensionLinear          = ndx.dimension(function(d) {return +d.week_ref;}),
@@ -53,35 +54,15 @@ class ChartLine extends Component {
                 });
             })
             .on('filtered.monitor', (chart, filter) => {
-                if (~prevFilters.indexOf(filter)) {
-                    //remove prevFilters value if it unchecked
-                    prevFilters.splice(prevFilters.indexOf(filter), 1);
-                    if (!prevFilters.length) {
-                        //set initial texts id all pie slices are unchecked
-                        chartLine.yAxisLabel(`All ${Helpers.capitalizeFirstLetter(parameter)}`)
-                    }
-                } else {
-                    //add one filter to comparison array
-                    prevFilters.push(filter);
-                }
-
-                chartLine.yAxisLabel(`${this.isMoreValue(prevFilters) || 'All'}  ${Helpers.capitalizeFirstLetter(parameter)} Sum`);
-
+                this.handleSlicesData(prevFilters, chartLine, parameter, filter);
+                this.setYAxisTitle(chartLine, prevFilters, parameter);
                 this.setClassToSlice(chart, prevFilters);
+                this.setColorForSlices(chart, categoriesOrder, chartLine, filter);
 
                 if (!filter) {
-                    pieHeader.innerText = this.state.initialPieText;
-                    prevFilters = [];
+                    dataRangeText = [];
+                    this.resetPieData(prevFilters, pieHeader, filter)
                 }
-
-                //push names of the groups to array that indicates current color's order
-                chart.selectAll('text.pie-slice').text(function(d) {
-                    categoriesOrder.push(d.data.key);
-                });
-                //return color index that matches index in the current color array
-                chartLine.colorAccessor(() => {
-                    return categoriesOrder.indexOf(filter)
-                });
                 chartLine.render();
             });
 
@@ -99,12 +80,15 @@ class ChartLine extends Component {
             .group(sumGroupLinear)
             .colors(colors)
             .colorDomain ([0,16])
+            .on('pretransition', () => {
+                if (dataRangeText.length)  {this.setPieTitle(['pastValue'], pieHeader, dataRangeText)}
+            })
             .addFilterHandler((filters, filter) => {
-                pieHeader.innerText = this.state.initialPieText;
                 let binsIn = chartLine.group().all().filter(function(kv) {
                     return filter.isFiltered(kv.key) && kv.value;
                 });
-                this.handlePieText(filter, binsIn, pieHeader);
+                dataRangeText = this.getDataRangeText(filter);
+                this.setPieTitle(binsIn, pieHeader, dataRangeText);
                 return binsIn.length ? [filter] : [];
             })
             //apply brush filter
@@ -115,6 +99,42 @@ class ChartLine extends Component {
                     }, 100);
             });
         dc.renderAll();
+    }
+
+    setColorForSlices(chart, categoriesOrder, chartLine, filter) {
+        //push names of the groups to array that indicates current color's order
+        chart.selectAll('text.pie-slice').text(function(d) {
+            categoriesOrder.push(d.data.key);
+        });
+        //return color index that matches index in the current color array
+        chartLine.colorAccessor(() => {
+            return categoriesOrder.indexOf(filter)
+        });
+    }
+
+    resetPieData(prevFilters, pieHeader, filter) {
+        pieHeader.innerText = this.state.initialPieText;
+        return filter ? prevFilters : [];
+    }
+
+    handleSlicesData(prevFilters, chartLine, parameter, filter) {
+        if (~prevFilters.indexOf(filter)) {
+            //remove prevFilters value if it unchecked
+            prevFilters.splice(prevFilters.indexOf(filter), 1);
+            if (!prevFilters.length) {
+                //set initial text for Y axis if all pie slices are unchecked
+                this.setYAxisTitle(chartLine, null, parameter);
+            }
+        } else {
+            //add one filter to comparison array
+            prevFilters.push(filter);
+        }
+    }
+
+    setYAxisTitle(chartLine, prevFilters, parameter) {
+        let isMore;
+        isMore = (prevFilters) ? this.isMoreValue(prevFilters): '';
+        return chartLine.yAxisLabel(`${isMore || 'All'}  ${Helpers.capitalizeFirstLetter(parameter)} Sum`);
     }
 
     setClassToSlice(chart, prevFilters) {
@@ -144,13 +164,16 @@ class ChartLine extends Component {
     }
 
     //display text in the pie header in correct range from the brush select tool in the line chart
-    handlePieText(filter, binsIn, pieHeader) {
+    getDataRangeText(filter) {
         let firstValue = Math.ceil(filter[0]);
         let secondValue = Math.floor(filter[filter.length - 1]);
-        let dataRangeText = (filter.length === 1) ? firstValue : firstValue + ' - ' + secondValue;
-
+        return (filter.length === 1) ? firstValue : firstValue + ' - ' + secondValue;
+    }
+    
+    setPieTitle(binsIn, pieHeader, dataRangeText) {
         if (binsIn.length) {
             pieHeader.innerText = 'Weeks: ' + dataRangeText;
+            return dataRangeText
         } else {
             pieHeader.innerText = this.state.initialPieText;
         }
