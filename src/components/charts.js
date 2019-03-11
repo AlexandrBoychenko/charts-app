@@ -17,7 +17,7 @@ class ChartLine extends Component {
     }
 
     componentDidMount() {
-        //for redraw charts on resize
+        //redraw charts on resize
         this.changeOnResize();
     }
 
@@ -34,7 +34,7 @@ class ChartLine extends Component {
             runDimensionLinear          = ndx.dimension(function(d) {return +d.week_ref;}),
             sumGroupLinear              = runDimensionLinear.group().reduceSum(function(d) {return d[parameter];}),
             runDimensionPie             = ndx.dimension(function(d) {return d.item_category;}),
-            SumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];});
+            sumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];});
 
         let categoriesOrder =[];
 
@@ -42,11 +42,12 @@ class ChartLine extends Component {
             .height((element) => Helpers.calcHeight(element))
             .innerRadius(50)
             .dimension(runDimensionPie)
-            .group(SumGroupPie)
+            .group(sumGroupPie)
             .legend(dc.legend())
             .ordinalColors(colors)
             //workaround for #703: not enough data is accessible through .label() to display percentages
             .on('pretransition', (chart) => {
+                this.setClassToSlice(chart, prevFilters);
                 chart.selectAll('text.pie-slice').text(function(d) {
                     let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
                     if (resultAngle >= 3)
