@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import Charts from './components/charts';
-import Dropdown from './components/dropdown'
+import Charts from './components/Charts';
+import Dropdown from './components/Dropdown'
 import * as d3 from 'd3';
 import dc from 'dc';
+import crossfilter from 'crossfilter';
+import { Helpers } from './helpers';
 
 import './style/style.css';
 
@@ -10,16 +12,33 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            csvData: [],
+            csvData: null,
             parameter: ''
         };
         this.onChangeSelect = this.onChangeSelect.bind(this);
     }
 
     componentDidMount() {
-            d3.csv("data.csv").then((csvData) => {
-                this.setState({csvData: csvData})
-        });
+        d3.csv("data.csv").then((csvData) => {
+         this.setState({csvData: csvData});
+        })
+    }
+
+    getInitData() {
+        if (this.state.csvData) {
+            let parameter = Helpers.returnValue(this.props.parameter, 'markdown');
+            let crossFilter                 = crossfilter(this.state.csvData),
+                runDimensionLinear          = crossFilter.dimension(function(d) {return +d.week_ref;}),
+                sumGroupLinear              = runDimensionLinear.group().reduceSum(function(d) {return d[parameter];}),
+                runDimensionPie             = crossFilter.dimension(function(d) {return d.item_category;}),
+                sumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];});
+
+            let csvData = this.state.csvData;
+            return <Charts
+                parameter={this.state.parameter}
+                {...{csvData, runDimensionLinear, sumGroupLinear, runDimensionPie, sumGroupPie}}
+            />
+        }
     }
 
     onChangeSelect(selectedItem) {
@@ -74,10 +93,7 @@ class App extends Component {
                         </div>
                     </nav>
 
-                    <Charts
-                        csvData={this.state.csvData}
-                        parameter={this.state.parameter}
-                    />
+                    {this.getInitData()}
 
                     <footer className="footer">
                         <div className="container-fluid">

@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import crossfilter from 'crossfilter';
 import { Helpers } from '../helpers';
 import colors from '../colors';
+//import PieChart from './PieChart';
 import '../style/style.css';
 
 class ChartLine extends Component {
@@ -19,88 +20,87 @@ class ChartLine extends Component {
     componentDidMount() {
         //redraw charts on resize
         this.changeOnResize();
-    }
 
-    componentDidUpdate() {
-        let chartLine = dc.lineChart('#line-chart');
-        let chartPie = dc.pieChart('#pie-chart');
+            let chartLine = dc.lineChart('#line-chart');
+            let chartPie = dc.pieChart('#pie-chart');
 
-        let pieHeader = this.myRef.current;
-        let parameter = Helpers.returnValue(this.props.parameter, 'markdown');
-        let prevFilters = [];
-        let dataRangeText = [];
+            let pieHeader = this.myRef.current;
+            let parameter = Helpers.returnValue(this.props.parameter, 'markdown');
+            let prevFilters = [];
+            let dataRangeText = [];
+            let categoriesOrder =[];
+            
+            chartPie
+                .height((element) => Helpers.calcHeight(element))
+                .innerRadius(50)
+                .dimension(this.props.runDimensionPie)
+                .group(this.props.sumGroupPie)
+                .legend(dc.legend())
+                .ordinalColors(colors)
+                //workaround for #703: not enough data is accessible through .label() to display percentages
+                .on('pretransition', (chart) => {
+                    this.setClassToSlice(chart, prevFilters);
+                    chart.selectAll('text.pie-slice').text(function(d) {
+                        let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
+                        if (resultAngle >= 3)
+                            return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
+                    });
+                })
+                .on('filtered.monitor', (chart, filter) => {
+                    this.handleSlicesData(prevFilters, chartLine, parameter, filter);
+                    this.setYAxisTitle(chartLine, prevFilters, parameter);
+                    this.setClassToSlice(chart, prevFilters);
+                    this.setColorForSlices(chart, categoriesOrder, chartLine, filter);
 
-        let ndx                         = crossfilter(this.props.csvData),
-            runDimensionLinear          = ndx.dimension(function(d) {return +d.week_ref;}),
-            sumGroupLinear              = runDimensionLinear.group().reduceSum(function(d) {return d[parameter];}),
-            runDimensionPie             = ndx.dimension(function(d) {return d.item_category;}),
-            sumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];});
-
-        let categoriesOrder =[];
-
-        chartPie
-            .height((element) => Helpers.calcHeight(element))
-            .innerRadius(50)
-            .dimension(runDimensionPie)
-            .group(sumGroupPie)
-            .legend(dc.legend())
-            .ordinalColors(colors)
-            //workaround for #703: not enough data is accessible through .label() to display percentages
-            .on('pretransition', (chart) => {
-                this.setClassToSlice(chart, prevFilters);
-                chart.selectAll('text.pie-slice').text(function(d) {
-                    let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
-                    if (resultAngle >= 3)
-                        return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
+                    if (!filter) {
+                        dataRangeText = [];
+                        this.resetPieData(prevFilters, pieHeader, filter);
+                        prevFilters = [];
+                    }
+                    chartLine.render();
                 });
-            })
-            .on('filtered.monitor', (chart, filter) => {
-                this.handleSlicesData(prevFilters, chartLine, parameter, filter);
-                this.setYAxisTitle(chartLine, prevFilters, parameter);
-                this.setClassToSlice(chart, prevFilters);
-                this.setColorForSlices(chart, categoriesOrder, chartLine, filter);
 
-                if (!filter) {
-                    dataRangeText = [];
-                    this.resetPieData(prevFilters, pieHeader, filter);
-                    prevFilters = [];
-                }
-                chartLine.render();
-            });
+            let xAxisRange = this.setAxisRange(this.props.runDimensionLinear, 'week_ref');
 
-        let xAxisRange = this.setAxisRange(runDimensionLinear, 'week_ref');
-
-        chartLine
-            .height((element) => Helpers.calcHeight(element))
-            .x(d3.scaleLinear().domain([xAxisRange.runMin, xAxisRange.runMax]))
-            .margins({top: 10, right: 10, bottom: 50, left: 60})
-            .xAxisLabel('Week Number')
-            .yAxisLabel(`All ${Helpers.capitalizeFirstLetter(parameter)} Sum`)
-            .renderDataPoints(true)
-            .clipPadding(10)
-            .dimension(runDimensionLinear)
-            .group(sumGroupLinear)
-            .colors(colors)
-            .colorDomain ([0,16])
-            .on('pretransition', () => {
-                if (dataRangeText.length)  {this.setPieTitle(['pastValue'], pieHeader, dataRangeText)}
-            })
-            .addFilterHandler((filters, filter) => {
-                let binsIn = chartLine.group().all().filter(function(kv) {
-                    return filter.isFiltered(kv.key) && kv.value;
-                });
-                dataRangeText = this.getDataRangeText(filter);
-                this.setPieTitle(binsIn, pieHeader, dataRangeText);
-                return binsIn.length ? [filter] : [];
-            })
-            //apply brush filter
-            .brush().on('brushend.no-empty', () => {
+            chartLine
+                .height((element) => Helpers.calcHeight(element))
+                .x(d3.scaleLinear().domain([xAxisRange.runMin, xAxisRange.runMax]))
+                .margins({top: 10, right: 10, bottom: 50, left: 60})
+                .xAxisLabel('Week Number')
+                .yAxisLabel(`All ${Helpers.capitalizeFirstLetter(parameter)} Sum`)
+                .renderDataPoints(true)
+                .clipPadding(10)
+                .dimension(this.props.runDimensionLinear)
+                .group(this.props.sumGroupLinear)
+                .colors(colors)
+                .colorDomain ([0,16])
+                .on('pretransition', () => {
+                    if (dataRangeText.length)  {this.setPieTitle(['pastValue'], pieHeader, dataRangeText)}
+                })
+                .addFilterHandler((filters, filter) => {
+                    let binsIn = chartLine.group().all().filter(function(kv) {
+                        return filter.isFiltered(kv.key) && kv.value;
+                    });
+                    dataRangeText = this.getDataRangeText(filter);
+                    this.setPieTitle(binsIn, pieHeader, dataRangeText);
+                    return binsIn.length ? [filter] : [];
+                })
+                //apply brush filter
+                .brush().on('brushend.no-empty', () => {
                 if(!chartLine.filters().length)
                     window.setTimeout(() => {
                         chartLine.filterAll().redraw();
                     }, 100);
             });
-        dc.renderAll();
+            dc.renderAll();
+    }
+
+    createPieChart() {
+
+    }
+
+    createLineChart() {
+
     }
 
     setColorForSlices(chart, categoriesOrder, chartLine, filter) {
