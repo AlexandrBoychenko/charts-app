@@ -62,7 +62,8 @@ class ChartLine extends Component {
 
                 if (!filter) {
                     dataRangeText = [];
-                    this.resetPieData(prevFilters, pieHeader, filter)
+                    this.resetPieData(prevFilters, pieHeader, filter);
+                    prevFilters = [];
                 }
                 chartLine.render();
             });
