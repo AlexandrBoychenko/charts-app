@@ -16,6 +16,11 @@ class ChartLine extends Component {
         this.myRef = React.createRef();
     }
 
+    componentDidMount() {
+        //for redraw charts on resize
+        this.changeOnResize();
+    }
+
     componentDidUpdate() {
         let chartLine = dc.lineChart('#line-chart');
         let chartPie = dc.pieChart('#pie-chart');
@@ -62,13 +67,7 @@ class ChartLine extends Component {
 
                 chartLine.yAxisLabel(`${this.isMoreValue(prevFilters) || 'All'}  ${Helpers.capitalizeFirstLetter(parameter)} Sum`);
 
-                chart.selectAll('g.pie-slice > path').attr('class', function(d) {
-                    if (~prevFilters.indexOf(d.data.key)) {
-                        return 'pie-selected';
-                    } else {
-                        return null;
-                    }
-                });
+                this.setClassToSlice(chart, prevFilters);
 
                 if (!filter) {
                     pieHeader.innerText = this.state.initialPieText;
@@ -84,9 +83,6 @@ class ChartLine extends Component {
                     return categoriesOrder.indexOf(filter)
                 });
                 chartLine.render();
-
-                console.log(chart.selectAll('g.pie-slice > path'));
-
             });
 
         let xAxisRange = this.setAxisRange(runDimensionLinear, 'week_ref');
@@ -119,9 +115,16 @@ class ChartLine extends Component {
                     }, 100);
             });
         dc.renderAll();
+    }
 
-        //for redraw charts on resize
-        this.changeOnResize();
+    setClassToSlice(chart, prevFilters) {
+        chart.selectAll('g.pie-slice > path').attr('class', function(d) {
+            if (~prevFilters.indexOf(d.data.key)) {
+                return 'pie-selected';
+            } else {
+                return null;
+            }
+        });
     }
 
     changeOnResize() {
