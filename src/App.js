@@ -13,7 +13,7 @@ class App extends Component {
         super(props);
         this.state = {
             csvData: null,
-            parameter: ''
+            parameter: 'markdown'
         };
         this.onChangeSelect = this.onChangeSelect.bind(this);
     }
@@ -36,7 +36,7 @@ class App extends Component {
             let csvData = this.state.csvData;
             return <Charts
                 parameter={this.state.parameter}
-                {...{csvData, runDimensionLinear, sumGroupLinear, runDimensionPie, sumGroupPie}}
+                {...{runDimensionLinear, sumGroupLinear, runDimensionPie, sumGroupPie}}
             />
         }
     }

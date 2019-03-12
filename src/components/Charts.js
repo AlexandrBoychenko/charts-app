@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import crossfilter from 'crossfilter';
 import { Helpers } from '../helpers';
 import colors from '../colors';
-//import PieChart from './PieChart';
+import PieChart from './PieChart';
 import '../style/style.css';
 
 class ChartLine extends Component {
@@ -12,14 +12,18 @@ class ChartLine extends Component {
         super(props);
         this.state = {
             parameter: 'Markdown',
-            initialPieText: 'For all categories'
+            initialPieText: 'For all categories',
+            prevFilters: [],
+            categoriesOrder: [],
+            dataRangeText: []
         };
-        this.myRef = React.createRef();
+
+        this.setArrayValues = this.setArrayValues.bind(this);
     }
 
     componentDidMount() {
         //redraw charts on resize
-        this.changeOnResize();
+        /*this.changeOnResize();
 
             let chartLine = dc.lineChart('#line-chart');
             let chartPie = dc.pieChart('#pie-chart');
@@ -92,62 +96,48 @@ class ChartLine extends Component {
                         chartLine.filterAll().redraw();
                     }, 100);
             });
-            dc.renderAll();
+            dc.renderAll();*/
     }
 
-    createPieChart() {
+    drawPieChart() {
+        //let chartLine = dc.lineChart('#line-chart');
+        let chartPie = dc.pieChart('#pie-chart');
 
+        return <PieChart
+            {...{chartPie}}
+            setArrayValues = {this.setArrayValues}
+            runDimensionPie = {this.props.runDimensionPie}
+            sumGroupPie = {this.props.sumGroupPie}
+            initialPieText = {this.state.initialPieText}
+            parentState = {this.state}
+
+        />
     }
 
-    createLineChart() {
-
-    }
-
-    setColorForSlices(chart, categoriesOrder, chartLine, filter) {
-        //push names of the groups to array that indicates current color's order
-        chart.selectAll('text.pie-slice').text(function(d) {
-            categoriesOrder.push(d.data.key);
-        });
-        //return color index that matches index in the current color array
-        chartLine.colorAccessor(() => {
-            return categoriesOrder.indexOf(filter)
-        });
-    }
-
-    resetPieData(prevFilters, pieHeader, filter) {
-        pieHeader.innerText = this.state.initialPieText;
-        return filter ? prevFilters : [];
-    }
-
-    handleSlicesData(prevFilters, chartLine, parameter, filter) {
-        if (~prevFilters.indexOf(filter)) {
-            //remove prevFilters value if it unchecked
-            prevFilters.splice(prevFilters.indexOf(filter), 1);
-            if (!prevFilters.length) {
-                //set initial text for Y axis if all pie slices are unchecked
-                this.setYAxisTitle(chartLine, null, parameter);
-            }
-        } else {
-            //add one filter to comparison array
-            prevFilters.push(filter);
+    setArrayValues(property, value) {
+        switch(property) {
+            case 'setPrevFilters':
+                this.setState({
+                    prevFilters: value || []
+                });
+                return;
+            case 'setCategoriesOrder':
+                this.setState({
+                    setCategoriesOrder: value || []
+                });
+                return;
+            default:
+                this.setState({
+                    setDataRangeText: value || []
+                });
         }
     }
 
-    setYAxisTitle(chartLine, prevFilters, parameter) {
-        let isMore;
-        isMore = (prevFilters) ? this.isMoreValue(prevFilters): '';
-        return chartLine.yAxisLabel(`${isMore || 'All'}  ${Helpers.capitalizeFirstLetter(parameter)} Sum`);
-    }
 
-    setClassToSlice(chart, prevFilters) {
-        chart.selectAll('g.pie-slice > path').attr('class', function(d) {
-            if (~prevFilters.indexOf(d.data.key)) {
-                return 'pie-selected';
-            } else {
-                return null;
-            }
-        });
-    }
+
+
+
+
 
     changeOnResize() {
         window.addEventListener('resize', () => {
@@ -188,21 +178,11 @@ class ChartLine extends Component {
                     <div className="row">
 
                         <div className="col-md-6">
-                            <div className="card">
-                                <div className="header">
-                                    <h4 className="title">
-                                        { Helpers.capitalizeFirstLetter(Helpers.returnValue(this.props.parameter, 'markdown')) + ' Statistics' }
-                                    </h4>
-                                    <p className="category" ref={this.myRef}>{this.state.initialPieText}</p>
-                                </div>
-                                <div className="content">
-                                    <div id="pie-chart" className="ct-chart"></div>
-                                </div>
-                            </div>
+                            {this.drawPieChart()}
                         </div>
 
                         <div className="col-md-6">
-                            <div className="card">
+                            {/*<div className="card">
                                 <div className="header">
                                     <h4 className="title">Time Line Chart</h4>
                                     <p className="category">Actual data for {
@@ -211,7 +191,7 @@ class ChartLine extends Component {
                                 <div className="content">
                                     <div id="line-chart" className="ct-chart"></div>
                                 </div>
-                            </div>
+                            </div>*/}
                         </div>
 
                     </div>
