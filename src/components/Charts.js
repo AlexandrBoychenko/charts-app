@@ -101,15 +101,14 @@ class ChartLine extends Component {
 
     drawPieChart() {
         //let chartLine = dc.lineChart('#line-chart');
-        let chartPie = dc.pieChart('#pie-chart');
 
         return <PieChart
-            {...{chartPie}}
             setArrayValues = {this.setArrayValues}
-            runDimensionPie = {this.props.runDimensionPie}
-            sumGroupPie = {this.props.sumGroupPie}
             initialPieText = {this.state.initialPieText}
             parentState = {this.state}
+            crossFilter = {this.props.crossFilter}
+            parameter = {this.state.parameter}
+            csvData = {this.props.csvData}
 
         />
     }

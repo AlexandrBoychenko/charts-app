@@ -36,7 +36,7 @@ class App extends Component {
             let csvData = this.state.csvData;
             return <Charts
                 parameter={this.state.parameter}
-                {...{runDimensionLinear, sumGroupLinear, runDimensionPie, sumGroupPie}}
+                {...{csvData}}
             />
         }
     }
