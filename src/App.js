@@ -5,6 +5,8 @@ import * as d3 from 'd3';
 import dc from 'dc';
 import crossfilter from 'crossfilter';
 import { Helpers } from './helpers';
+import PieChart from './components/PieChart';
+import LineChart from './components/LineChart';
 
 import './style/style.css';
 
@@ -26,18 +28,31 @@ class App extends Component {
 
     getInitData() {
         if (this.state.csvData) {
-            let parameter = Helpers.returnValue(this.props.parameter, 'markdown');
-            let crossFilter                 = crossfilter(this.state.csvData),
-                runDimensionLinear          = crossFilter.dimension(function(d) {return +d.week_ref;}),
-                sumGroupLinear              = runDimensionLinear.group().reduceSum(function(d) {return d[parameter];}),
-                runDimensionPie             = crossFilter.dimension(function(d) {return d.item_category;}),
-                sumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];});
+            let crossFilter = crossfilter(this.state.csvData);
 
-            let csvData = this.state.csvData;
-            return <Charts
-                parameter={this.state.parameter}
-                {...{csvData}}
-            />
+            return(
+            <div className="content">
+                <div className="container-fluid">
+                    <div className="row">
+
+                        <div className="col-md-6">
+                            <PieChart
+                                parameter={this.state.parameter}
+                                csvData={this.state.csvData}
+                                crossFilter={crossFilter}/>
+                        </div>
+
+                        <div className="col-md-6">
+                            <LineChart
+                                parameter={this.state.parameter}
+                                csvData={this.state.csvData}
+                                crossFilter={crossFilter}/>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            )
         }
     }
 

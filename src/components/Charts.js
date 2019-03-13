@@ -11,7 +11,7 @@ class ChartLine extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            parameter: 'Markdown',
+            parameter: 'markdown',
             initialPieText: 'For all categories',
             prevFilters: [],
             categoriesOrder: [],
@@ -101,13 +101,14 @@ class ChartLine extends Component {
 
     drawPieChart() {
         //let chartLine = dc.lineChart('#line-chart');
+        let parameter = Helpers.returnValue(this.props.parameter, 'markdown');
 
         return <PieChart
             setArrayValues = {this.setArrayValues}
             initialPieText = {this.state.initialPieText}
             parentState = {this.state}
             crossFilter = {this.props.crossFilter}
-            parameter = {this.state.parameter}
+            parameter = {parameter}
             csvData = {this.props.csvData}
 
         />
