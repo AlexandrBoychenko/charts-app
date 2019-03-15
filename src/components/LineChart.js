@@ -5,21 +5,16 @@ import colors from '../colors';
 import { Helpers } from '../helpers';
 import '../style/style.css';
 
-class PieChart extends Component {
-    constructor(props) {
-        super(props);
-        this.myRef = React.createRef();
-    }
-
+class LineChart extends Component {
     componentDidMount() {
-        let chartLine = dc.lineChart('#line-chart');
-        let parameter = this.props.parameter;
 
         let runDimensionLinear             = this.props.crossFilter.dimension(function(d) {return +d.week_ref;}),
-            sumGroupLinear                 = runDimensionLinear.group().reduceSum(function(d) {return d[parameter];});
-
-
-        let xAxisRange = this.setAxisRange(runDimensionLinear, 'week_ref');
+            sumGroupLinear                 = runDimensionLinear.group().reduceSum(function(d) {return d[parameter];}),
+            chartLine                      = dc.lineChart('#line-chart'),
+            parameter                      = this.props.parameter,
+            xAxisRange                     = this.setAxisRange(runDimensionLinear, 'week_ref'),
+            pieHeader                      = this.props.pieHeader,
+            dataRangeText                  = this.props.getMemoryData('dataRangeText');
 
         chartLine
             .height((element) => Helpers.calcHeight(element))
@@ -52,6 +47,8 @@ class PieChart extends Component {
                 }, 100);
         });
 
+        this.props.setChartLine(chartLine);
+
         dc.renderAll();
     }
 
@@ -72,22 +69,7 @@ class PieChart extends Component {
             pieHeader.innerText = 'Weeks: ' + dataRangeText;
             return dataRangeText
         } else {
-            pieHeader.innerText = this.state.initialPieText;
-        }
-    }
-
-    getDataRangeText(filter) {
-        let firstValue = Math.ceil(filter[0]);
-        let secondValue = Math.floor(filter[filter.length - 1]);
-        return (filter.length === 1) ? firstValue : firstValue + ' - ' + secondValue;
-    }
-
-    setPieTitle(binsIn, pieHeader, dataRangeText) {
-        if (binsIn.length) {
-            pieHeader.innerText = 'Weeks: ' + dataRangeText;
-            return dataRangeText
-        } else {
-            pieHeader.innerText = this.state.initialPieText;
+            pieHeader.innerText = this.props.initialPieText;
         }
     }
 
@@ -107,4 +89,4 @@ class PieChart extends Component {
     }
 }
 
-export default PieChart
+export default LineChart

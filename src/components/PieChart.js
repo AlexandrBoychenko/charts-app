@@ -11,12 +11,14 @@ class PieChart extends Component {
     }
 
     componentDidMount() {
-        let chartPie = dc.pieChart('#pie-chart');
-        let parameter = this.props.parameter;
 
         let runDimensionPie             = this.props.crossFilter.dimension(function(d) {return d.item_category;}),
-            sumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];});
+            sumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];}),
+            chartPie                    = dc.pieChart('#pie-chart'),
+            parameter                   = this.props.parameter,
+            pieHeader                   = this.myRef.current;
 
+        this.props.setPieHeader(pieHeader);
 
         chartPie
             .height((element) => Helpers.calcHeight(element))
@@ -27,34 +29,39 @@ class PieChart extends Component {
             .ordinalColors(colors)
             //workaround for #703: not enough data is accessible through .label() to display percentages
             .on('pretransition', (chart) => {
-                this.setClassToSlice(chart, prevFilters);
-                chart.selectAll('text.pie-slice').text(function(d) {
-                    let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
-                    if (resultAngle >= 3)
-                        return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
-                });
-            })
-            .on('filtered.monitor', (chart, filter) => {
-                this.handleSlicesData(prevFilters, chartLine, parameter, filter);
-                this.setYAxisTitle(chartLine, prevFilters, parameter);
-                this.setClassToSlice(chart, prevFilters);
-                this.setColorForSlices(chart, categoriesOrder, chartLine, filter);
+                 this.setClassToSlice(chart, this.props.getMemoryData('prevFilters'));
+                 chart.selectAll('text.pie-slice').text(function(d) {
+                 let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
+                 if (resultAngle >= 3)
+                    return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
+             });
+         })
+        .on('filtered.monitor', (chart, filter) => {
+            let prevFilters = this.props.getMemoryData('prevFilters');
+            let categoriesOrder = this.props.getMemoryData('categoriesOrder');
 
-                if (!filter) {
-                    dataRangeText = [];
-                    this.resetPieData(prevFilters, pieHeader, filter);
-                    prevFilters = [];
-                }
-                chartLine.render();
-            });
+            this.handleSlicesData(prevFilters, this.props.chartLine, parameter, filter);
+            this.setYAxisTitle(this.props.chartLine, prevFilters, parameter);
+            this.setClassToSlice(chart, prevFilters);
+            this.setColorForSlices(chart, categoriesOrder, this.props.chartLine, filter);
+
+             if (!filter) {
+                 this.props.setMemoryData('dataRangeText', []);
+                 this.resetPieData(prevFilters, pieHeader, filter);
+                 this.props.setMemoryData('prevFilters', []);
+             }
+            this.props.chartLine.render();
+             });
 
         dc.renderAll();
     }
 
     setColorForSlices(chart, categoriesOrder, chartLine, filter) {
         //push names of the groups to array that indicates current color's order
-        chart.selectAll('text.pie-slice').text(function(d) {
+        chart.selectAll('text.pie-slice').text((d) => {
+            let categoriesOrder = this.props.getMemoryData('categoriesOrder');
             categoriesOrder.push(d.data.key);
+            this.props.setMemoryData('categoriesOrder', categoriesOrder);
         });
         //return color index that matches index in the current color array
         chartLine.colorAccessor(() => {
@@ -65,14 +72,17 @@ class PieChart extends Component {
     handleSlicesData(prevFilters, chartLine, parameter, filter) {
         if (~prevFilters.indexOf(filter)) {
             //remove prevFilters value if it unchecked
-            prevFilters.splice(prevFilters.indexOf(filter), 1);
+            prevFilters.splice(prevFilters.indexOf(filter), 1)
+            this.props.setMemoryData('prevFilters', prevFilters);
             if (!prevFilters.length) {
                 //set initial text for Y axis if all pie slices are unchecked
                 this.setYAxisTitle(chartLine, null, parameter);
             }
         } else {
             //add one filter to comparison array
+            let prevFilters = this.props.getMemoryData('prevFilters');
             prevFilters.push(filter);
+            this.props.setMemoryData('prevFilters', prevFilters);
         }
     }
 
