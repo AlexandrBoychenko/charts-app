@@ -16,7 +16,8 @@ class App extends Component {
             parameter: 'markdown',
             prevFilters: [],
             categoriesOrder: [],
-            dataRangeText: []
+            dataRangeText: [],
+            pieHeader: {}
         };
         this.onChangeSelect = this.onChangeSelect.bind(this);
         this.setMemoryData = this.setMemoryData.bind(this);
@@ -87,7 +88,7 @@ class App extends Component {
             case 'prevFilters':
                 return this.setState({
                     prevFilters: value
-                });
+                }, () => console.log(this.state.prevFilters));
             case 'categoriesOrder':
                 return this.setState({
                     categoriesOrder: value

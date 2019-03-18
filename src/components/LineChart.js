@@ -13,7 +13,6 @@ class LineChart extends Component {
             chartLine                      = dc.lineChart('#line-chart'),
             parameter                      = this.props.parameter,
             xAxisRange                     = this.setAxisRange(runDimensionLinear, 'week_ref'),
-            pieHeader                      = this.props.pieHeader,
             dataRangeText                  = this.props.getMemoryData('dataRangeText');
 
         chartLine
@@ -29,14 +28,14 @@ class LineChart extends Component {
             .colors(colors)
             .colorDomain ([0,16])
             .on('pretransition', () => {
-                if (dataRangeText.length)  {this.setPieTitle(['pastValue'], pieHeader, dataRangeText)}
+                if (this.props.getMemoryData('dataRangeText').length)  {this.setPieTitle(['pastValue'], this.props.pieHeader, dataRangeText)}
             })
             .addFilterHandler((filters, filter) => {
                 let binsIn = chartLine.group().all().filter(function(kv) {
                     return filter.isFiltered(kv.key) && kv.value;
                 });
                 dataRangeText = this.getDataRangeText(filter);
-                this.setPieTitle(binsIn, pieHeader, dataRangeText);
+                this.setPieTitle(binsIn, this.props.pieHeader, dataRangeText);
                 return binsIn.length ? [filter] : [];
             })
             //apply brush filter
@@ -70,6 +69,7 @@ class LineChart extends Component {
             return dataRangeText
         } else {
             pieHeader.innerText = this.props.initialPieText;
+            this.props.setMemoryData('dataRangeText', '');
         }
     }
 
