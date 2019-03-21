@@ -7,8 +7,6 @@ class Dropdown extends Component {
         this.handleChangeSelect = this.handleChangeSelect.bind(this)
     }
 
-    componentDidMount() {}
-
     handleChangeSelect(e) {
         this.props.onChangeSelect(e.target.textContent.toLowerCase());
     }

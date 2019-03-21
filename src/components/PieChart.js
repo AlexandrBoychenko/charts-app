@@ -10,7 +10,7 @@ class PieChart extends Component {
         this.myRef = React.createRef();
     }
 
-    componentDidMount() {
+    componentDidUpdate() {
 
         let runDimensionPie             = this.props.crossFilter.dimension(function(d) {return d.item_category;}),
             sumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];}),
@@ -18,7 +18,7 @@ class PieChart extends Component {
             parameter                   = this.props.parameter,
             pieHeader                   = this.myRef.current;
 
-        this.props.setPieHeader(pieHeader);
+        //this.props.setPieHeader(pieHeader);
 
         chartPie
             .height((element) => Helpers.calcHeight(element))
@@ -33,7 +33,7 @@ class PieChart extends Component {
 
                 if (!pastElements[pastElements.length - 1]) {
                     pastElements = [];
-                    this.props.setMemoryData('prevFilters', []);
+                    //this.props.setMemoryData('prevFilters', []);
                 }
                 this.setClassToSlice(chart, pastElements);
                  chart.selectAll('text.pie-slice').text(function(d) {
@@ -58,12 +58,7 @@ class PieChart extends Component {
             this.handleSlicesData(prevFilters, this.props.chartLine, parameter, filter);
             this.props.chartLine.render();
         });
-
         dc.renderAll();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        //console.log(nextProps.getMemoryData('prevFilter'));
     }
 
     setColorForSlices(chart, categoriesOrder, chartLine, filter) {
@@ -71,7 +66,7 @@ class PieChart extends Component {
         chart.selectAll('text.pie-slice').text((d) => {
             let categoriesOrder = this.props.getMemoryData('categoriesOrder');
             categoriesOrder.push(d.data.key);
-            this.props.setMemoryData('categoriesOrder', categoriesOrder);
+            //this.props.setMemoryData('categoriesOrder', categoriesOrder);
         });
         //return color index that matches index in the current color array
         chartLine.colorAccessor(() => {
@@ -92,7 +87,7 @@ class PieChart extends Component {
             prevFilters = this.props.getMemoryData('prevFilters');
             prevFilters.push(filter);
         }
-        this.props.setMemoryData('prevFilters', prevFilters);
+        //this.props.setMemoryData('prevFilters', prevFilters);
     }
 
     setYAxisTitle(chartLine, prevFilters, parameter) {
