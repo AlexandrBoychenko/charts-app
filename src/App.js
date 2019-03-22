@@ -41,50 +41,6 @@ class App extends Component {
         });
     }
 
-    getInitData() {
-        if (this.state.csvData) {
-            let crossFilter = crossfilter(this.state.csvData);
-
-            return(
-                <div className="content">
-                    <div className="container-fluid">
-                        <div className="row">
-
-                            <div className="col-md-6">
-                                <PieChart
-                                    parameter={this.state.parameter}
-                                    csvData={this.state.csvData}
-                                    crossFilter={crossFilter}
-                                    setMemoryData={this.setMemoryData}
-                                    getMemoryData={this.getMemoryData}
-                                    setPieHeader={this.setPieHeader}
-                                    initialPieText='For all categories'
-                                    chartLine={this.state.chartLine}
-                                    selected={this.state.selected}
-                                    isSelected={this.isSelected}/>
-                            </div>
-
-                            <div className="col-md-6">
-                                <LineChart
-                                    parameter={this.state.parameter}
-                                    csvData={this.state.csvData}
-                                    crossFilter={crossFilter}
-                                    setMemoryData={this.setMemoryData}
-                                    getMemoryData={this.getMemoryData}
-                                    pieHeader={this.state.pieHeader}
-                                    initialPieText='For all categories'
-                                    setChartLine={this.setChartLine}
-                                    selected={this.state.selected}
-                                    isSelected={this.isSelected}/>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            )
-        }
-    }
-
     onChangeSelect(selectedItem) {
         this.setState({parameter: selectedItem});
         this.setState({selected: true});
@@ -137,6 +93,50 @@ class App extends Component {
     resetAll() {
         dc.filterAll();
         dc.renderAll();
+    }
+
+    getInitData() {
+        let basicProps;
+        if (this.state.csvData) {
+            let crossFilter = crossfilter(this.state.csvData);
+            basicProps = {
+                parameter: this.state.parameter,
+                csvData: this.state.csvData,
+                crossFilter: crossFilter,
+                setMemoryData: this.setMemoryData,
+                getMemoryData: this.getMemoryData,
+                initialPieText: 'For all categories',
+                selected: this.state.selected,
+                isSelected: this.isSelected
+            };
+
+            return(
+                <div className="content">
+                    <div className="container-fluid">
+                        <div className="row">
+
+                            <div className="col-md-6">
+                                <PieChart
+                                    {...basicProps}
+                                    setPieHeader={this.setPieHeader}
+                                    initialPieText='For all categories'
+                                    chartLine={this.state.chartLine}
+                                />
+                            </div>
+
+                            <div className="col-md-6">
+                                <LineChart
+                                    {...basicProps}
+                                    pieHeader={this.state.pieHeader}
+                                    setChartLine={this.setChartLine}
+                                />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            )
+        }
     }
 
     render() {
