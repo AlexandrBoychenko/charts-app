@@ -17,13 +17,15 @@ class App extends Component {
             prevFilters: [],
             categoriesOrder: [],
             dataRangeText: [],
-            pieHeader: {}
+            pieHeader: {},
+            selected: true
         };
         this.onChangeSelect = this.onChangeSelect.bind(this);
         this.setMemoryData = this.setMemoryData.bind(this);
         this.getMemoryData = this.getMemoryData.bind(this);
         this.setPieHeader = this.setPieHeader.bind(this);
         this.setChartLine = this.setChartLine.bind(this);
+        this.isSelected = this.isSelected.bind(this);
     }
 
     componentDidMount() {
@@ -57,7 +59,9 @@ class App extends Component {
                                 getMemoryData={this.getMemoryData}
                                 setPieHeader={this.setPieHeader}
                                 initialPieText='For all categories'
-                                chartLine={this.state.chartLine}/>
+                                chartLine={this.state.chartLine}
+                                selected={this.state.selected}
+                                isSelected={this.isSelected}/>
                         </div>
 
                         <div className="col-md-6">
@@ -69,7 +73,9 @@ class App extends Component {
                                 getMemoryData={this.getMemoryData}
                                 pieHeader={this.state.pieHeader}
                                 initialPieText='For all categories'
-                                setChartLine={this.setChartLine}/>
+                                setChartLine={this.setChartLine}
+                                selected={this.state.selected}
+                                isSelected={this.isSelected}/>
                         </div>
 
                     </div>
@@ -81,6 +87,11 @@ class App extends Component {
 
     onChangeSelect(selectedItem) {
         this.setState({parameter: selectedItem});
+        this.setState({selected: true});
+    }
+
+    isSelected(value) {
+        this.setState({selected: value});
     }
 
     setMemoryData(property, value) {
@@ -88,7 +99,7 @@ class App extends Component {
             case 'prevFilters':
                 return this.setState({
                     prevFilters: value
-                }, () => console.log(this.state.prevFilters));
+                });
             case 'categoriesOrder':
                 return this.setState({
                     categoriesOrder: value

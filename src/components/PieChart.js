@@ -10,8 +10,14 @@ class PieChart extends Component {
         this.myRef = React.createRef();
     }
 
-    componentDidMount() {
+    componentDidUpdate() {
+        if (this.props.selected) {
+            this.props.isSelected(false);
+            this.renderChart();
+        }
+    }
 
+    renderChart() {
         let runDimensionPie             = this.props.crossFilter.dimension(function(d) {return d.item_category;}),
             sumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];}),
             chartPie                    = dc.pieChart('#pie-chart'),
@@ -36,34 +42,31 @@ class PieChart extends Component {
                     this.props.setMemoryData('prevFilters', []);
                 }
                 this.setClassToSlice(chart, pastElements);
-                 chart.selectAll('text.pie-slice').text(function(d) {
-                 let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
-                 if (resultAngle >= 3)
-                    return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
-             });
-         })
-        .on('filtered.monitor', (chart, filter) => {
-            let prevFilters = this.props.getMemoryData('prevFilters');
-            let categoriesOrder = this.props.getMemoryData('categoriesOrder');
+                chart.selectAll('text.pie-slice').text(function(d) {
+                    let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
+                    if (resultAngle >= 3)
+                        return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
+                });
+            })
+            .on('filtered.monitor', (chart, filter) => {
+                let prevFilters = this.props.getMemoryData('prevFilters');
+                let categoriesOrder = this.props.getMemoryData('categoriesOrder');
 
-            if (!filter) {
-                this.resetPieData(pieHeader);
-                prevFilters = [];
-            } else {
-                this.setColorForSlices(chart, categoriesOrder, this.props.chartLine, filter);
+                if (!filter) {
+                    this.resetPieData(pieHeader);
+                    prevFilters = [];
+                } else {
+                    this.setColorForSlices(chart, categoriesOrder, this.props.chartLine, filter);
+
+                    this.setClassToSlice(chart, prevFilters);
+                }
+
+                this.handleSlicesData(prevFilters, this.props.chartLine, parameter, filter);
                 this.setYAxisTitle(this.props.chartLine, prevFilters, parameter);
-                this.setClassToSlice(chart, prevFilters);
-            }
-
-            this.handleSlicesData(prevFilters, this.props.chartLine, parameter, filter);
-            this.props.chartLine.render();
-        });
+                this.props.chartLine.render();
+            });
 
         dc.renderAll();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        //console.log(nextProps.getMemoryData('prevFilter'));
     }
 
     setColorForSlices(chart, categoriesOrder, chartLine, filter) {
