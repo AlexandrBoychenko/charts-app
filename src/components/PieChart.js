@@ -11,14 +11,20 @@ class PieChart extends Component {
     }
 
     componentDidUpdate() {
+        if (this.props.selected) {
+            this.props.isSelected(false);
+            this.renderChart();
+        }
+    }
 
+    renderChart() {
         let runDimensionPie             = this.props.crossFilter.dimension(function(d) {return d.item_category;}),
             sumGroupPie                 = runDimensionPie.group().reduceSum(function(d) {return d[parameter];}),
             chartPie                    = dc.pieChart('#pie-chart'),
             parameter                   = this.props.parameter,
             pieHeader                   = this.myRef.current;
 
-        //this.props.setPieHeader(pieHeader);
+        this.props.setPieHeader(pieHeader);
 
         chartPie
             .height((element) => Helpers.calcHeight(element))
@@ -33,31 +39,33 @@ class PieChart extends Component {
 
                 if (!pastElements[pastElements.length - 1]) {
                     pastElements = [];
-                    //this.props.setMemoryData('prevFilters', []);
+                    this.props.setMemoryData('prevFilters', []);
                 }
                 this.setClassToSlice(chart, pastElements);
-                 chart.selectAll('text.pie-slice').text(function(d) {
-                 let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
-                 if (resultAngle >= 3)
-                    return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
-             });
-         })
-        .on('filtered.monitor', (chart, filter) => {
-            let prevFilters = this.props.getMemoryData('prevFilters');
-            let categoriesOrder = this.props.getMemoryData('categoriesOrder');
+                chart.selectAll('text.pie-slice').text(function(d) {
+                    let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
+                    if (resultAngle >= 3)
+                        return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
+                });
+            })
+            .on('filtered.monitor', (chart, filter) => {
+                let prevFilters = this.props.getMemoryData('prevFilters');
+                let categoriesOrder = this.props.getMemoryData('categoriesOrder');
 
-            if (!filter) {
-                this.resetPieData(pieHeader);
-                prevFilters = [];
-            } else {
-                this.setColorForSlices(chart, categoriesOrder, this.props.chartLine, filter);
+                if (!filter) {
+                    this.resetPieData(pieHeader);
+                    prevFilters = [];
+                } else {
+                    this.setColorForSlices(chart, categoriesOrder, this.props.chartLine, filter);
+
+                    this.setClassToSlice(chart, prevFilters);
+                }
+
+                this.handleSlicesData(prevFilters, this.props.chartLine, parameter, filter);
                 this.setYAxisTitle(this.props.chartLine, prevFilters, parameter);
-                this.setClassToSlice(chart, prevFilters);
-            }
+                this.props.chartLine.render();
+            });
 
-            this.handleSlicesData(prevFilters, this.props.chartLine, parameter, filter);
-            this.props.chartLine.render();
-        });
         dc.renderAll();
     }
 
@@ -66,7 +74,7 @@ class PieChart extends Component {
         chart.selectAll('text.pie-slice').text((d) => {
             let categoriesOrder = this.props.getMemoryData('categoriesOrder');
             categoriesOrder.push(d.data.key);
-            //this.props.setMemoryData('categoriesOrder', categoriesOrder);
+            this.props.setMemoryData('categoriesOrder', categoriesOrder);
         });
         //return color index that matches index in the current color array
         chartLine.colorAccessor(() => {
@@ -87,7 +95,7 @@ class PieChart extends Component {
             prevFilters = this.props.getMemoryData('prevFilters');
             prevFilters.push(filter);
         }
-        //this.props.setMemoryData('prevFilters', prevFilters);
+        this.props.setMemoryData('prevFilters', prevFilters);
     }
 
     setYAxisTitle(chartLine, prevFilters, parameter) {

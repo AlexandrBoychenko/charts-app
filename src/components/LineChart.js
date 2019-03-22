@@ -7,10 +7,18 @@ import '../style/style.css';
 
 class LineChart extends Component {
     componentDidMount() {
-        this.runChart();
+        this.renderChart();
     }
 
-    runChart() {
+    componentDidUpdate() {
+        if (this.props.selected) {
+            this.props.isSelected(false);
+            this.renderChart();
+        }
+    }
+
+    renderChart() {
+
         let runDimensionLinear             = this.props.crossFilter.dimension(function(d) {return +d.week_ref;}),
             sumGroupLinear                 = runDimensionLinear.group().reduceSum(function(d) {return d[parameter];}),
             chartLine                      = dc.lineChart('#line-chart'),
