@@ -86,16 +86,16 @@ class LineChart extends Component {
 
     render() {
         return (
-             <div className="card">
-                 <div className="header">
-                     <h4 className="title">Time Line Chart</h4>
-                     <p className="category">Actual data for {
-                     Helpers.returnValue(this.props.csvData[0] && this.props.csvData[0]['year_ref'], '2014')}</p>
-                 </div>
-                 <div className="content">
-                     <div id="line-chart" className="ct-chart"></div>
-                 </div>
-             </div>
+            <div className="card">
+                <div className="header">
+                    <h4 className="title">Time Line Chart</h4>
+                    <p className="category">Actual data for {
+                        Helpers.returnValue(this.props.csvData[0] && this.props.csvData[0]['year_ref'], '2014')}</p>
+                </div>
+                <div className="content">
+                    <div id="line-chart" className="ct-chart"></div>
+                </div>
+            </div>
         )
     }
 }
