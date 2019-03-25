@@ -86,7 +86,6 @@ class App extends Component {
                             <div className="col-md-6">
                                 <PieChart
                                     {...basicProps}
-                                    setPieHeader={this.setPieHeader}
                                     initialPieText='For all categories'
                                     chartLine={this.state.chartLine}
                                 />
@@ -96,7 +95,6 @@ class App extends Component {
                                 <LineChart
                                     {...basicProps}
                                     pieHeader={this.state.pieHeader}
-                                    setChartLine={this.setChartLine}
                                 />
                             </div>
 

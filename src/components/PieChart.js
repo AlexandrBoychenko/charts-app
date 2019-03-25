@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import dc from 'dc';
+import PropTypes from 'prop-types';
 import colors from '../colors';
 import { Helpers } from '../helpers';
+import commonPropTypes from '../commonPropTypes';
 import '../style/style.css';
 
 class PieChart extends Component {
@@ -140,5 +142,11 @@ class PieChart extends Component {
         )
     }
 }
+
+PieChart.propTypes = {
+    ...commonPropTypes,
+    initialPieText: PropTypes.string.isRequired,
+    chartLine: PropTypes.object
+};
 
 export default PieChart

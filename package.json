@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "crossfilter": "latest",
+    "d3": "latest",
+    "dc": "latest",
+    "prop-types": "latest",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "react-scripts": "2.1.5",
-    "dc": "latest",
-    "d3": "latest",
-    "crossfilter": "latest",
+    "react-scripts": "^2.1.8",
     "sass": "^1.17.2"
   },
   "scripts": {
