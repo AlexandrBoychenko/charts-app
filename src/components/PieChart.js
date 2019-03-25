@@ -24,7 +24,7 @@ class PieChart extends Component {
             parameter                   = this.props.parameter,
             pieHeader                   = this.myRef.current;
 
-        this.props.setPieHeader(pieHeader);
+        this.props.setMemoryData('pieHeader', pieHeader);
 
         chartPie
             .height((element) => Helpers.calcHeight(element))
@@ -44,7 +44,7 @@ class PieChart extends Component {
                 this.setClassToSlice(chart, pastElements);
                 chart.selectAll('text.pie-slice').text(function(d) {
                     let resultAngle = (d.endAngle - d.startAngle) / (2 * Math.PI) * 100;
-                    if (resultAngle >= 3)
+                    if (resultAngle >= 4)
                         return dc.utils.printSingleValue(Number.parseFloat(d.data.value).toFixed(2));
                 });
             })

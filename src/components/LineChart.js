@@ -57,7 +57,7 @@ class LineChart extends Component {
                 }, 100);
         });
 
-        this.props.setChartLine(chartLine);
+        this.props.setMemoryData('chartLine', chartLine);
 
         dc.renderAll();
     }

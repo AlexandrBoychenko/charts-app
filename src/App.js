@@ -23,8 +23,6 @@ class App extends Component {
         this.onChangeSelect = this.onChangeSelect.bind(this);
         this.setMemoryData = this.setMemoryData.bind(this);
         this.getMemoryData = this.getMemoryData.bind(this);
-        this.setPieHeader = this.setPieHeader.bind(this);
-        this.setChartLine = this.setChartLine.bind(this);
         this.isSelected = this.isSelected.bind(this);
     }
 
@@ -51,43 +49,13 @@ class App extends Component {
     }
 
     setMemoryData(property, value) {
-        switch(property) {
-            case 'prevFilters':
-                return this.setState({
-                    prevFilters: value
-                });
-            case 'categoriesOrder':
-                return this.setState({
-                    categoriesOrder: value
-                });
-            default:
-                return this.setState({
-                    dataRangeText: value
-                });
-        }
+        let entity = {};
+        entity[property] = value;
+        this.setState( entity );
     }
 
     getMemoryData(property) {
-        switch(property) {
-            case 'prevFilters':
-                return this.state.prevFilters;
-            case 'categoriesOrder':
-                return this.state.categoriesOrder;
-            default:
-                return this.state.dataRangeText;
-        }
-    }
-
-    setPieHeader(value) {
-        return this.setState({
-            pieHeader: value
-        });
-    }
-
-    setChartLine(value) {
-        return this.setState({
-            chartLine: value
-        });
+        return this.state[property];
     }
 
     resetAll() {
