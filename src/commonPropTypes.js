@@ -7,6 +7,5 @@ export default {
     setMemoryData: PropTypes.func.isRequired,
     getMemoryData: PropTypes.func.isRequired,
     initialPieText: PropTypes.string.isRequired,
-    selected: PropTypes.bool.isRequired,
-    isSelected: PropTypes.func
+    renderIfSelected: PropTypes.func
 }

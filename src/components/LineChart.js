@@ -13,10 +13,7 @@ class LineChart extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.selected) {
-            this.props.isSelected(false);
-            this.renderChart();
-        }
+        this.props.renderIfSelected(this);
     }
 
     renderChart() {

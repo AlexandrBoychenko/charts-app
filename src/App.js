@@ -23,7 +23,7 @@ class App extends Component {
         this.onChangeSelect = this.onChangeSelect.bind(this);
         this.setMemoryData = this.setMemoryData.bind(this);
         this.getMemoryData = this.getMemoryData.bind(this);
-        this.isSelected = this.isSelected.bind(this);
+        this.renderIfSelected = this.renderIfSelected.bind(this);
     }
 
     componentDidMount() {
@@ -40,12 +40,8 @@ class App extends Component {
     }
 
     onChangeSelect(selectedItem) {
-        this.setState({parameter: selectedItem});
-        this.setState({selected: true});
-    }
-
-    isSelected(value) {
-        this.setState({selected: value});
+        this.setState({...this.state, parameter: selectedItem, selected: true});
+        dc.filterAll();
     }
 
     setMemoryData(property, value) {
@@ -63,6 +59,13 @@ class App extends Component {
         dc.renderAll();
     }
 
+    renderIfSelected(context) {
+        if (this.state.selected) {
+            this.setState({selected: false});
+            context.renderChart();
+        }
+    }
+
     getInitData() {
         let basicProps;
         if (this.state.csvData) {
@@ -74,8 +77,7 @@ class App extends Component {
                 setMemoryData: this.setMemoryData,
                 getMemoryData: this.getMemoryData,
                 initialPieText: 'For all categories',
-                selected: this.state.selected,
-                isSelected: this.isSelected
+                renderIfSelected: this.renderIfSelected
             };
 
             return(
