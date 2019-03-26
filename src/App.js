@@ -35,7 +35,7 @@ class App extends Component {
 
     changeOnResize() {
         window.addEventListener('resize', () => {
-            dc.renderAll();
+            this.resetAll();
         });
     }
 
